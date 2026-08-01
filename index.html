@@ -698,7 +698,8 @@ SCREENS.admin = () => {
         <td class="num">${last ? esc(last.total) : '<span class="none">—</span>'}</td>
         <td>${last ? esc(last.ts) : '<span class="none">응답 없음</span>'}</td>
         <td>${last ? esc(last.name) + ' ' + esc(last.title) : ''}</td>
-        <td class="num">${open ? '▲' : (u.runs ? '▼' : '')}</td>
+        <td class="num"><button class="btn ghost sm uEdit" data-cid="${esc(u.cid)}"
+          >수정</button> ${open ? '▲' : (u.runs ? '▼' : '')}</td>
       </tr>`;
     if(!open || !u.runs) return head;
     const sub = (u.history||[]).map(h => `
@@ -723,6 +724,7 @@ SCREENS.admin = () => {
   <div class="adm"><div class="in">
     <b>관리자 대시보드</b><span>응답 이력 열람</span>
     <div class="sp"></div>
+    <span id="admNew" style="cursor:pointer;text-decoration:underline">＋ 계정 추가</span>
     <span id="admReload" style="cursor:pointer;text-decoration:underline">새로고침</span>
     <span id="admOut" style="cursor:pointer;text-decoration:underline">나가기</span>
   </div></div>
@@ -1001,6 +1003,11 @@ function bind(){
 
   /* 관리자 */
   on('#admReload', () => { V.list = null; render(); });
+  on('#admNew', () => userForm(null));
+  document.querySelectorAll('.uEdit').forEach(el =>
+    el.addEventListener('click', e => { e.stopPropagation();
+      const u = ((V.list||{}).users||[]).find(x => x.cid === el.dataset.cid);
+      if(u) userForm(u); }));
   on('#admOut', askLogout);
   on('#toDash', () => { V.view = null; go('admin'); });
   document.querySelectorAll('.tbl tr.clk').forEach(el =>
@@ -1358,6 +1365,101 @@ function doSavePlan(){
     alert(x && x.ok ? `${x.saved}건을 저장했습니다.`
       : '저장하지 못했습니다.\n' + apiErrText(x && x.error));
   }).catch(() => { busy(false); alert('서버에 닿지 못했습니다.'); });
+}
+
+/* ══════════════ 계정 관리 (2026-08-01 · 지시 7번) ══════════════
+   편집기 함수를 부르지 않고 화면에서 계정을 만들고 코드를 발급한다. */
+function userForm(u){
+  const isNew = !u;
+  u = u || {cid:'', company:'', status:'active', role:'company'};
+  const m = $('#modal'), b = $('#modalBody');
+  if(!m || !b) return;
+  b.innerHTML = `
+    <h1 class="h-l" style="margin:0 0 4px">${isNew ? '계정 추가' : '계정 수정'}</h1>
+    <div class="sub muted">${isNew ? '접수번호와 기업명을 넣으시면 코드는 자동으로 만들어집니다.'
+      : '아이디는 바꿀 수 없습니다. 바꾸시려면 새로 만들고 옛 계정을 지우십시오.'}</div>
+    <label class="f" for="uCid">아이디 (접수번호)</label>
+    <input type="text" id="uCid" value="${esc(u.cid)}" placeholder="ITC2026-000"
+      autocapitalize="off" spellcheck="false" ${isNew ? '' : 'readonly'}>
+    <label class="f" for="uCompany">기업명</label>
+    <input type="text" id="uCompany" value="${esc(u.company||'')}" placeholder="주식회사 ○○">
+    <label class="f" for="uRole">역할</label>
+    <select id="uRole">
+      <option value="company"${u.role!=='admin'?' selected':''}>기업</option>
+      <option value="admin"${u.role==='admin'?' selected':''}>운영기관(관리자)</option>
+    </select>
+    <label class="f" for="uStatus">상태</label>
+    <select id="uStatus">
+      <option value="active"${u.status!=='inactive'?' selected':''}>사용</option>
+      <option value="inactive"${u.status==='inactive'?' selected':''}>사용 중지</option>
+    </select>
+    ${isNew ? '' : `<label class="f" for="uCode">접속 코드</label>
+      <input type="text" id="uCode" placeholder="비워 두면 지금 코드를 그대로 씁니다"
+        autocapitalize="off" spellcheck="false">
+      <p class="muted" style="margin-top:6px">코드를 새로 뽑으시려면 아래 「코드 재발급」을 누르십시오.
+        재발급하면 <b style="color:var(--ink)">옛 코드는 즉시 쓸 수 없습니다.</b></p>`}
+    <div class="err hide" id="uErr"></div>
+    <div class="row">
+      <button class="btn" id="uSave">저장</button>
+      <button class="btn ghost" id="uCancel">닫기</button>
+      ${isNew ? '' : `<span class="sp" style="flex:1"></span>
+        <button class="btn ghost sm" id="uIssue">코드 재발급</button>
+        <button class="btn ghost sm" id="uDel">삭제</button>`}
+    </div>`;
+  m.classList.add('on');
+
+  const on = (sel, fn) => { const e = $(sel); if(e) e.addEventListener('click', fn); };
+  const err = t => { const e = $('#uErr'); e.textContent = t; e.classList.remove('hide'); };
+  on('#uCancel', () => m.classList.remove('on'));
+  on('#uSave', () => {
+    const cid = ($('#uCid').value||'').trim();
+    if(!cid) return err('아이디를 입력해 주십시오.');
+    const body = {token:S.token, cid, company:($('#uCompany').value||'').trim(),
+      role:$('#uRole').value, status:$('#uStatus').value};
+    const cf = $('#uCode'); if(cf && (cf.value||'').trim()) body.code = cf.value.trim();
+    busy(true, '저장하는 중입니다…');
+    api('saveUser', body).then(x => {
+      busy(false);
+      if(!x || !x.ok) return err(userErrText(x && x.error));
+      m.classList.remove('on');
+      V.list = null; render();
+      if(x.mode === 'create')
+        alert(`계정을 만들었습니다.\n\n아이디  ${x.cid}\n접속 코드  ${x.code}\n\n`
+          + '이 코드는 여기서만 보여 드립니다. 지금 전달하시거나 적어 두십시오.');
+    }).catch(() => { busy(false); err('서버에 닿지 못했습니다.'); });
+  });
+  on('#uIssue', () => {
+    if(!confirm(`${u.cid} 의 접속 코드를 새로 발급합니다.\n`
+      + '옛 코드는 즉시 쓸 수 없습니다.\n\n계속하시겠습니까?')) return;
+    busy(true, '코드를 발급하는 중입니다…');
+    api('issueCode', {token:S.token, cid:u.cid}).then(x => {
+      busy(false);
+      if(!x || !x.ok) return err(userErrText(x && x.error));
+      m.classList.remove('on'); V.list = null; render();
+      alert(`새 접속 코드\n\n아이디  ${x.cid}\n접속 코드  ${x.code}\n\n`
+        + '이 코드는 여기서만 보여 드립니다.');
+    }).catch(() => { busy(false); err('서버에 닿지 못했습니다.'); });
+  });
+  on('#uDel', () => {
+    if(!confirm(`${u.cid} 계정을 지웁니다. 되돌릴 수 없습니다.\n\n계속하시겠습니까?`)) return;
+    busy(true, '삭제하는 중입니다…');
+    api('deleteUser', {token:S.token, cid:u.cid}).then(x => {
+      busy(false);
+      if(!x || !x.ok) return err(userErrText(x && x.error, x));
+      m.classList.remove('on'); V.list = null; render();
+    }).catch(() => { busy(false); err('서버에 닿지 못했습니다.'); });
+  });
+}
+
+function userErrText(e, x){
+  if(e === 'cid_required') return '아이디를 입력해 주십시오.';
+  if(e === 'cid_charset') return '아이디에는 영문·숫자·하이픈·밑줄만 쓰실 수 있습니다.';
+  if(e === 'code_short') return '접속 코드는 4자 이상이어야 합니다.';
+  if(e === 'last_admin') return '마지막 관리자 계정입니다. 내리거나 지울 수 없습니다.';
+  if(e === 'has_runs') return `응답 ${(x&&x.runs)||''}회차가 남아 있어 지울 수 없습니다. `
+    + '대신 상태를 「사용 중지」로 바꾸십시오.';
+  if(e === 'notfound') return '계정을 찾지 못했습니다.';
+  return apiErrText(e);
 }
 
 function doUnlock(cid){
