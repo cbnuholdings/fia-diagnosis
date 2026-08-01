@@ -431,7 +431,8 @@ SCREENS.home = () => {
   return `
   <section class="scr"><div class="wrap">
     <div class="eyebrow">${esc(S.company || S.cid)}</div>
-    <h1 class="h-l" style="margin-top:6px">진단 이력</h1>
+    <h1 class="h-l" style="margin-top:6px;display:flex;align-items:center">진단 이력
+      <button class="lnk" id="homeReload" style="margin-left:auto;font-size:12.5px">새로고침</button></h1>
     <div class="card">
       ${!m ? '<p class="muted">불러오는 중입니다.</p>'
         : list.length ? list.map(r => `
@@ -1023,6 +1024,7 @@ function bind(){
   document.querySelectorAll('.openMine').forEach(el =>
     el.addEventListener('click', () => openRun(S.cid, Number(el.dataset.run))));
   on('#toHome', () => { V.view = null; go('home'); });
+  on('#homeReload', () => { V.myRuns = null; render(); });
   on('#resume', () => go('survey'));
   on('#startNew', startNew);
   on('#dropDraft', () => {
@@ -1596,12 +1598,24 @@ function apiErrText(err){
   return err ? '오류 — ' + err : '';
 }
 
-function api(action, payload){
+/* 🔴 GAS 는 간헐적으로 404·HTML 오류면을 돌려준다(실측 여러 번). 그때 r.json() 이
+   던져서 「서버에 닿지 못했습니다」가 떴다 — 서버가 죽은 게 아니라 한 번 튄 것이다.
+   **읽기 전용 액션만** 2회까지 다시 시도한다. login·submit 같은 쓰기는 재시도하면
+   실패 카운터가 부풀거나 회차가 겹치므로 절대 넣지 않는다. */
+const RETRY_ACTIONS = ['adminList', 'adminRun', 'myRuns', 'myRun', 'simulate', 'ping'];
+function api(action, payload, _try){
   const url = DATA.meta.gas_url;
   if(!url || url.indexOf('__GAS_URL__') >= 0)
     return Promise.reject(new Error('GAS 주소 미주입'));
   return fetch(url, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body: JSON.stringify(Object.assign({action}, payload))}).then(r => r.json());
+    body: JSON.stringify(Object.assign({action}, payload))})
+    .then(r => r.json())
+    .catch(err => {
+      const n = _try || 0;
+      if(RETRY_ACTIONS.indexOf(action) < 0 || n >= 2) throw err;
+      return new Promise(res => setTimeout(res, 700 * (n + 1)))
+        .then(() => api(action, payload, n + 1));
+    });
 }
 
 /* ── 결과 탭 ── */
@@ -2198,9 +2212,10 @@ function goHome(){
      && !confirm('응답을 멈추고 진단 이력으로 돌아갑니다.\n'
        + '지금까지 답하신 내용은 이 브라우저에 남아 이어서 하실 수 있습니다.\n\n돌아가시겠습니까?'))
     return;
-  /* 🔴 이력을 다시 받는다. 안 그러면 로그인 때 받은 옛 값이 그대로 보여
-     방금 제출한 회차가 없는 것처럼 나온다(2026-08-01 보고). */
-  V.view = null; V.myRuns = null; V.list = null;
+  /* 🔴 캐시를 여기서 지우지 않는다 — 홈을 오갈 때마다 서버를 다시 불러
+     화면이 무겁게 느껴졌다(2026-08-01 보고). 신선도가 걸리는 지점(제출·계획 저장·
+     계정 변경)이 각자 캐시를 비우고, 수동 새로고침 버튼을 둔다. */
+  V.view = null;
   go(isAdmin() ? 'admin' : 'home');
 }
 (function bindOnce(){
