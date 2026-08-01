@@ -139,6 +139,9 @@ table.ex th{background:var(--thead);color:var(--ink);font-weight:600}
 .chkitem.on{background:var(--brand-l)}
 .chkitem.on span{color:var(--ink)}
 .chkitem.none span{color:var(--ghost)}
+.chkitem:has(input:disabled){cursor:default}
+.chkitem:has(input:disabled):hover{background:transparent}
+.chkitem.on:has(input:disabled){background:var(--brand-l)}
 .cmp{display:grid;grid-template-columns:1fr 42px 18px 42px 150px;gap:8px;align-items:center;
   padding:9px 0;border-top:1px solid var(--line);font-size:13.5px}
 .cmp.head{border-top:0;color:var(--sub);font-size:12px;padding-bottom:4px}
@@ -324,6 +327,21 @@ function busy(on, msg){
 }
 const isAdmin = () => S.role === 'admin';
 const RES = () => (V.view && V.view.result) || S.result;
+
+/* 🔴 대응 선택의 출처가 역할에 따라 다르다.
+   기업 = 이 브라우저의 S.plan(고치는 중) · 관리자 = 서버가 준 기업의 저장분(읽기 전용).
+   관리자가 자기 로컬 선택을 보면 늘 빈 화면이 된다. */
+function planNow(){
+  if(!isAdmin()) return S.plan;
+  const p = (V.view && V.view.plan) || {};
+  const out = {};
+  Object.keys(p).forEach(k => {
+    const c = p[k] && p[k].choice;
+    out[k] = (c === '' || c == null) ? null : Number(c);
+  });
+  return out;
+}
+const planRO = () => isAdmin();      // 관리자는 고칠 수 없다
 
 /* 로그아웃 = 이 브라우저에서 지우기. 초기화 버튼과 하는 일이 같아 하나로 합쳤다. */
 function logout(force){
@@ -733,14 +751,19 @@ SCREENS.admin = () => {
    🔴 구간 이동을 단정하지 않는다 — 경계가 잠정값이다. 「닿습니다」로 적는다.
    🔴 표는 10영역(RI 포함·미산입 표기) · 그래프는 9영역(RI 제외). */
 function panePlan(main, side, r){
-  const picked = Object.keys(S.plan).filter(k => S.plan[k] !== null && S.plan[k] !== undefined);
+  const PL = planNow();
+  const picked = Object.keys(PL).filter(k => PL[k] !== null && PL[k] !== undefined);
   const run = (r.meta && r.meta.run) || 0;
 
   if(!picked.length){
-    main.innerHTML = `<div class="card"><h3 class="h-m">아직 고르신 대응이 없습니다</h3>
-      <p class="lead">「보완 과제」 탭에서 문항마다 하나씩 고르시면,
-        그 선택을 반영했을 때 영역별 위치가 어떻게 달라지는지 여기에 나옵니다.</p>
-      <div class="row"><button class="btn" id="toTask">보완 과제로</button></div></div>`;
+    main.innerHTML = isAdmin()
+      ? `<div class="card"><h3 class="h-m">이 기업이 고른 대응이 없습니다</h3>
+         <p class="lead">기업이 결과 화면의 「보완 과제」에서 대응을 고르고
+           「이 계획 저장」을 누르면 여기에 나옵니다.</p></div>`
+      : `<div class="card"><h3 class="h-m">아직 고르신 대응이 없습니다</h3>
+         <p class="lead">「보완 과제」 탭에서 문항마다 하나씩 고르시면,
+           그 선택을 반영했을 때 영역별 위치가 어떻게 달라지는지 여기에 나옵니다.</p>
+         <div class="row"><button class="btn" id="toTask">보완 과제로</button></div></div>`;
     side.innerHTML = ''; return;
   }
 
@@ -753,7 +776,7 @@ function panePlan(main, side, r){
         <p class="lead">채점키가 서버에만 있어 여기서는 산술을 하지 않습니다.</p></div>`;
       return; }
     busy(true, '고르신 대응을 반영해 계산하는 중입니다…');
-    const picks = {}; picked.forEach(k => picks[k] = S.plan[k]);
+    const picks = {}; picked.forEach(k => picks[k] = PL[k]);
     api('simulate', {token:S.token, run, cid:(r.meta||{}).cid, picks}).then(x => {
       busy(false);
       if(!x || !x.ok){ main.innerHTML = `<div class="card">
@@ -824,9 +847,10 @@ function panePlan(main, side, r){
           s.why === 'na' ? `${esc(s.item)} — 「아직까지 없었습니다」로 답하신 문항입니다. 결측이라 올리지 않습니다.`
           : s.why === 'top' ? `${esc(s.item)} — 이미 가장 높은 선택입니다.`
           : `${esc(s.item)} — 알 수 없는 문항입니다.`).join('<br>')}</p>` : ''}
-      <div class="row"><button class="btn sm" id="savePlan">이 계획 저장</button>
+      ${isAdmin() ? '<p class="muted" style="margin-top:10px">기업이 저장한 계획입니다.</p>'
+        : `<div class="row"><button class="btn sm" id="savePlan">이 계획 저장</button>
         <button class="btn ghost sm" id="toTask">다시 고르기</button></div>
-      <p class="muted" style="margin-top:10px">저장하시면 운영기관과 조력자가 함께 볼 수 있습니다.</p>
+      <p class="muted" style="margin-top:10px">저장하시면 운영기관과 조력자가 함께 볼 수 있습니다.</p>`}
     </div>`;
 }
 
@@ -1318,6 +1342,7 @@ function wsDownload(ref){
 function doSavePlan(){
   const r = RES(); if(!r) return;
   const picks = {}, labels = {};
+  if(isAdmin()){ alert('관리자는 기업의 계획을 고치지 않습니다.'); return; }
   Object.keys(S.plan).forEach(id => {
     if(S.plan[id] === null || S.plan[id] === undefined) return;
     picks[id] = S.plan[id];
@@ -1543,17 +1568,22 @@ function paneTask(main, side, r){
   }
 
   const items = list.flatMap(p => p.items || []);
-  const done = items.filter(i => S.plan[i.id] !== undefined && S.plan[i.id] !== null).length;
+  const PL = planNow(), ro = planRO();
+  const done = items.filter(i => PL[i.id] !== undefined && PL[i.id] !== null).length;
 
   main.innerHTML = `
-    <div class="card brand">
+    ${ro ? `<div class="card">
+      <div class="kv"><b>열람</b><span>기업이 고른 대응입니다. 여기서는 고칠 수 없습니다.</span></div>
+      <p class="muted" style="margin-top:8px">${done ? `${done}건을 고르셨습니다.`
+        : '아직 고른 대응이 없습니다. 기업이 결과 화면에서 고르고 저장하면 여기에 나옵니다.'}</p>
+    </div>` : `<div class="card brand">
       <div class="kv"><b>고르는 법</b><span>문항마다 <b style="color:var(--ink)">하나만</b> 고르십시오.
         지금 손댈 것이 아니면 「지금은 아님」을 고르시면 됩니다.</span></div>
       <p class="muted" style="margin-top:8px">세 가지 중 무엇을 고르시든 산술은 같습니다 —
         문항 하나가 한 단계 오르는 것으로 봅니다.
         <b style="color:var(--ink)">무엇을 고르실지는 실행 가능성으로 정하십시오.</b></p>
       <p class="muted">이미 하고 계신 것이라면 고르실 이유가 없습니다.</p>
-    </div>` + list.map(p => `
+    </div>`}` + list.map(p => `
     <div class="card">
       <div style="display:flex;gap:8px;align-items:center">
         <h3 class="h-m" style="margin:0">${esc(p.competency_name || p.competency)}</h3>
@@ -1564,13 +1594,15 @@ function paneTask(main, side, r){
       ${(p.items||[]).map(i => `<div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
         <div class="muted">문항 처방</div>
         <div style="font-size:15px;color:var(--ink);font-weight:600;margin:4px 0 8px">${esc(i.headline)}</div>
-        ${(i.checks||[]).map((c, n) => `<label class="chkitem${S.plan[i.id]===n?' on':''}">
+        ${(i.checks||[]).map((c, n) => `<label class="chkitem${PL[i.id]===n?' on':''}">
           <input type="radio" name="plan-${esc(i.id)}" class="planpick"
-            data-item="${esc(i.id)}" data-idx="${n}" ${S.plan[i.id]===n?'checked':''}>
+            data-item="${esc(i.id)}" data-idx="${n}"
+            ${PL[i.id]===n?'checked':''} ${ro?'disabled':''}>
           <span>${md(c)}</span></label>`).join('')}
-        <label class="chkitem none${S.plan[i.id]===null?' on':''}">
+        <label class="chkitem none${PL[i.id]===null?' on':''}">
           <input type="radio" name="plan-${esc(i.id)}" class="planpick"
-            data-item="${esc(i.id)}" data-idx="none" ${S.plan[i.id]===null?'checked':''}>
+            data-item="${esc(i.id)}" data-idx="none"
+            ${PL[i.id]===null?'checked':''} ${ro?'disabled':''}>
           <span>지금은 아님</span></label>
         ${i.note ? `<div class="notice" style="margin-top:10px">${md(i.note)}</div>` : ''}
         ${i.citation ? `<div class="cite">참고 — ${esc(i.citation.title||'')} ${i.citation.source?`(${esc(i.citation.source)})`:''}
