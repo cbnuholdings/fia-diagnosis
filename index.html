@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FIA 창업자 역량진단</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* 조판 토큰 — FIA_결과보고서_서식_v1.md §4 */
+:root{
+  --brand:#A8265A; --brand-d:#6B1739; --brand-l:#FCF3F7;
+  --warn:#C05621; --warn-bg:#FDF4EC; --warn-line:#F0D9C4;
+  --mid:#B0B8C4; --good:#14795C;
+  --ink:#101828; --body:#46525F; --sub:#8A93A0; --ghost:#98A2AE;
+  --line:#E4E9F0; --rule:#D9E0E9; --thead:#F6F8FB; --page:#FBFCFD;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Pretendard,-apple-system,system-ui,"Malgun Gothic",sans-serif;
+  color:var(--body);background:var(--page);line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{color:var(--ink);font-weight:700;line-height:1.35}
+a{color:var(--brand)}
+.wrap{max-width:720px;margin:0 auto;padding:0 24px}
+.wide{max-width:1180px;margin:0 auto;padding:0 24px}
+.hide{display:none !important}
+
+/* 상단 */
+.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top .in{max-width:1180px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:14px}
+.logo{font-weight:700;color:var(--ink);font-size:15px;letter-spacing:-.01em}
+.logo span{color:var(--brand)}
+.top .sp{flex:1}
+.org{font-size:12.5px;color:var(--sub)}
+
+/* 진행 */
+.steps{display:flex;gap:6px;font-size:12px;color:var(--sub);flex-wrap:wrap}
+.steps b{font-weight:500}
+.steps .on{color:var(--brand);font-weight:600}
+.bar{height:4px;background:var(--line);border-radius:99px;overflow:hidden;margin:10px 0 0}
+.bar i{display:block;height:100%;background:var(--brand);transition:width .25s}
+
+/* 공통 블록 */
+section.scr{padding:36px 0 72px}
+.eyebrow{font-size:12.5px;color:var(--brand);font-weight:600;letter-spacing:.02em}
+.h-xl{font-size:34px;letter-spacing:-.02em;margin:10px 0 14px}
+.h-l{font-size:24px;letter-spacing:-.015em;margin:0 0 10px}
+.h-m{font-size:17px;margin:0 0 8px}
+.lead{font-size:15px;color:var(--body)}
+.muted{color:var(--sub);font-size:13px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:14px 0}
+.card.warn{background:var(--warn-bg);border-color:var(--warn-line)}
+.card.brand{background:var(--brand-l);border-color:#F0D6E2}
+.notice{background:var(--brand-l);border:1px solid #F0D6E2;border-radius:10px;
+  padding:10px 14px;font-size:12.5px;color:var(--brand-d)}
+ul.tight{margin:8px 0 0 18px}
+ul.tight li{margin:4px 0;font-size:14px}
+.kv{display:flex;gap:10px;font-size:14px;margin:6px 0}
+.kv b{min-width:88px;color:var(--ink);font-weight:600}
+
+/* 버튼 */
+.btn{appearance:none;border:0;border-radius:9px;background:var(--brand);color:#fff;
+  font:600 15px/1 Pretendard,sans-serif;padding:14px 22px;cursor:pointer;letter-spacing:-.01em}
+.btn:hover{background:var(--brand-d)}
+.btn[disabled]{background:#D6DBE3;color:#fff;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--body);border:1px solid var(--rule)}
+.btn.ghost:hover{background:var(--thead)}
+.btn.sm{padding:9px 14px;font-size:13.5px}
+.row{display:flex;gap:10px;align-items:center;margin-top:20px;flex-wrap:wrap}
+.row .sp{flex:1}
+
+/* 입력 */
+label.f{display:block;font-size:13px;color:var(--ink);font-weight:600;margin:14px 0 6px}
+input[type=text],select{width:100%;padding:12px 13px;border:1px solid var(--rule);border-radius:9px;
+  font:400 15px Pretendard,sans-serif;color:var(--ink);background:#fff}
+input:focus,select:focus{outline:2px solid var(--brand);outline-offset:-1px}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line)}
+.chk:first-of-type{border-top:0}
+.chk input{margin-top:4px;width:17px;height:17px;accent-color:var(--brand);flex:none}
+.chk .t{font-size:13.5px}
+.chk .t b{display:block;color:var(--ink);font-size:14px;margin-bottom:3px}
+.req{display:inline-block;background:var(--brand-l);color:var(--brand-d);border-radius:4px;
+  font-size:11px;padding:1px 6px;margin-left:6px;vertical-align:2px;font-weight:600}
+
+/* 문항 */
+.q{border-top:1px solid var(--line);padding:24px 0}
+.q:first-of-type{border-top:0}
+.q .no{font-size:12px;color:var(--brand);font-weight:600}
+.q .qt{font-size:16px;color:var(--ink);font-weight:600;margin:6px 0 14px;line-height:1.5}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--rule);border-radius:9px;
+  padding:12px 14px;cursor:pointer;font-size:14px;background:#fff}
+.opt:hover{border-color:var(--brand);background:var(--brand-l)}
+.opt input{margin-top:3px;accent-color:var(--brand);flex:none}
+.opt.on{border-color:var(--brand);background:var(--brand-l);color:var(--ink)}
+.opt.na{border-style:dashed;color:var(--sub)}
+.scale5{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.scale5 .opt{flex-direction:column;align-items:center;text-align:center;gap:7px;padding:12px 6px;font-size:12.5px}
+@media(max-width:640px){.scale5{grid-template-columns:1fr}
+  .scale5 .opt{flex-direction:row;align-items:flex-start;text-align:left}}
+
+/* 조건 문항 */
+.cond{border:1px solid var(--line);border-radius:12px;background:#fff;padding:20px 22px;margin:16px 0}
+.cond h4{font-size:16px;margin-bottom:6px}
+.crit{background:var(--thead);border-radius:9px;padding:12px 14px;margin:8px 0;font-size:13px}
+.crit b{color:var(--ink)}
+.crit ul{margin:6px 0 0 17px}
+.crit li{margin:3px 0}
+.excl{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:9px;
+  padding:12px 14px;font-size:13px;color:var(--warn);margin:10px 0}
+table.ex{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+table.ex th,table.ex td{border:1px solid var(--rule);padding:7px 9px;text-align:left;vertical-align:top}
+table.ex th{background:var(--thead);color:var(--ink);font-weight:600}
+
+/* 결과 */
+.res-head{background:#fff;border-bottom:1px solid var(--line);padding:20px 0 18px}
+.score-big{font-size:52px;font-weight:800;color:var(--brand);letter-spacing:-.03em;line-height:1}
+.bands{display:flex;gap:8px;margin-top:8px}
+.pill{font-size:12px;border-radius:99px;padding:3px 11px;font-weight:600}
+.p-w{background:var(--warn-bg);color:var(--warn)}
+.p-m{background:#F1F4F8;color:#5B6675}
+.p-g{background:#E8F4F0;color:var(--good)}
+.grid3{display:grid;grid-template-columns:340px 1fr 300px;gap:22px;align-items:start}
+@media(max-width:1080px){.grid3{grid-template-columns:1fr}}
+.comp-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px}
+.comp-row:first-child{border-top:0}
+.comp-row .nm{flex:1;color:var(--ink)}
+.comp-row .sc{font-variant-numeric:tabular-nums;color:var(--sub);min-width:34px;text-align:right}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:18px 0 0;flex-wrap:wrap}
+.tab{padding:10px 14px;font-size:13.5px;color:var(--sub);cursor:pointer;border-bottom:2px solid transparent}
+.tab.on{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}
+.chkitem{display:flex;gap:9px;align-items:flex-start;padding:9px 0;font-size:13.5px;border-top:1px dashed var(--line)}
+.chkitem:first-child{border-top:0}
+.chkitem input{margin-top:3px;accent-color:var(--brand);flex:none}
+.tool{border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin:9px 0;background:#fff}
+.tool b{display:block;color:var(--ink);font-size:14px}
+.cite{font-size:12px;color:var(--sub);border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
+.metric{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
+.metric:first-child{border-top:0}
+.metric .v{color:var(--ghost)}
+footer{border-top:1px solid var(--line);background:#fff;padding:22px 0;margin-top:40px}
+footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:var(--sub)}
+.stamp{font-size:12px;color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
+  border-radius:8px;padding:8px 13px;display:inline-block}
+.err{color:#B42318;font-size:13px;margin-top:8px}
+
+/* 관리자 대시보드 */
+.adm{background:#0F1B2A;color:#C9D3E0}
+.adm .in{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;gap:12px;
+  align-items:center;font-size:12.5px}
+.adm .in b{color:#fff}
+.adm .sp{flex:1}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{background:var(--thead);color:var(--ink);font-weight:600;text-align:left;
+  padding:10px 12px;border-bottom:1px solid var(--rule);white-space:nowrap}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr.clk{cursor:pointer}
+.tbl tr.clk:hover td{background:var(--brand-l)}
+.tbl .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl .none{color:var(--ghost)}
+.tbl .sub td{background:#FCFDFE;border-bottom:1px solid var(--line)}
+.stat{display:flex;gap:26px;flex-wrap:wrap;margin:4px 0 0}
+.stat div{min-width:96px}
+.stat .n{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1.2}
+.tag{font-size:11.5px;border-radius:5px;padding:2px 7px;font-weight:600;
+  background:#F1F4F8;color:#5B6675}
+.tag.off{background:var(--warn-bg);color:var(--warn)}
+.tag.sig{background:var(--warn-bg);color:var(--warn)}
+.ansrow{display:grid;grid-template-columns:96px 1fr 200px 62px;gap:12px;font-size:13px;
+  padding:10px 0;border-top:1px solid var(--line);align-items:start}
+.ansrow:first-child{border-top:0}
+.ansrow .id{color:var(--brand);font-weight:600;font-size:12px}
+.ansrow .pick{color:var(--ink)}
+.ansrow .na{color:var(--warn)}
+@media(max-width:900px){
+  .ansrow{grid-template-columns:1fr;gap:4px}
+  .tbl th:nth-child(n+5),.tbl td:nth-child(n+5){display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="in">
+  <div class="logo">FIA <span>창업자 역량진단</span></div>
+  <div class="sp"></div>
+  <div class="org">충북대학교기술지주(주)</div>
+</div></div>
+
+<main id="app"></main>
+
+<footer><div class="in">
+  본 진단은 파일럿 운영 중이며 결과는 내부 참고용입니다. ·
+  결과는 심사·선정 판단이나 지원 배분의 근거로 사용하지 않습니다.
+</div></footer>
+
+<script>
+const DATA = {"meta": {"id": "FIA-30", "title": "FIA 창업자 역량 자가진단 (30문항)", "minutes": 20, "count": 30, "watermark": "파일럿·내부 참고용", "gas_url": "https://script.google.com/macros/s/AKfycbzUupYFvtdvkzvwPoaYnQlPDHSEH-pEjPLixUNQtCQli2i5t38FxUNE3wzvzANLA0XtYQ/exec", "per_page": 5}, "names_ko": {"FM": "창업자 마인드셋", "EC": "실행력", "CU": "고객 이해", "MI": "시장 이해", "PC": "제품 역량", "TC": "기술사업화", "TB": "팀 빌딩", "IR": "투자 준비도", "ST": "전략적 사고", "RI": "지역혁신 연계", "PATH": "성장 경로"}, "items": [{"id": "SEL-FM-01", "comp": "FM", "method": "SEL", "n": 1, "text": "최근 1년간 사업상 심각한 좌절(투자 거절, 핵심 인력 이탈, 계약 파기 등)을 겪은 뒤 1주일 이내에 구체적 대안 행동에 착수한 경험이 얼마나 됩니까?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "최근 1년간 그런 좌절을 겪은 일이 아직까지 없었습니다"}, {"id": "SEL-EC-01", "comp": "EC", "method": "SEL", "n": 2, "text": "고객·멘토·투자자의 부정적 피드백을 받은 뒤 2주 이내에 제품·전략을 실제로 수정한 적이 얼마나 됩니까?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "고객·멘토·투자자로부터 그런 부정적 피드백을 받은 일이 아직까지 없었습니다"}, {"id": "SEL-EC-02", "comp": "EC", "method": "SEL", "n": 3, "text": "새 아이디어를 최소기능형태(프로토타입·랜딩페이지·실험)로 세상에 내놓기까지 통상 얼마나 걸립니까?", "scale": "leadtime5", "options": ["6개월 초과", "3–6개월", "1–3개월", "2주–1개월", "2주 이내"]}, {"id": "SEL-CU-01", "comp": "CU", "method": "SEL", "n": 4, "text": "최근 3개월간 제품 개선 목적으로 잠재·기존 고객과 30분 이상 1:1 심층 인터뷰를 진행한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-CU-02", "comp": "CU", "method": "SEL", "n": 5, "text": "고객이 제품을 실제로 사용하는 현장을 직접 방문·관찰한 적이 얼마나 됩니까?(최근 6개월)", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-MI-01", "comp": "MI", "method": "SEL", "n": 6, "text": "최근 6개월간 경쟁사·대체재의 가격·기능·투자 동향을 조사해 기록으로 남긴 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-PC-01", "comp": "PC", "method": "SEL", "n": 7, "text": "최근 6개월간 기능을 추가하기 전에 가설을 문서로 정의하고 실험으로 확인한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "최근 6개월간 제품에 기능을 추가한 일이 아직까지 없었습니다"}, {"id": "SEL-PC-02", "comp": "PC", "method": "SEL", "n": 8, "text": "최근 6개월간 제품·서비스 버전을 반복 개선(iteration)한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-TC-01", "comp": "TC", "method": "SEL", "n": 9, "text": "핵심 기술에 대해 특허 출원·영업비밀 관리 등 방어 조치를 실제로 취했다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-TC-02", "comp": "TC", "method": "SEL", "n": 10, "text": "기술을 비전문가(투자자·고객)에게 설명하기 위한 별도 자료를 준비해 둔다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-TB-01", "comp": "TB", "method": "SEL", "n": 11, "text": "핵심 인재 영입 시 명확한 역량·컬처핏 기준을 문서화해 활용한다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"], "na": "핵심 인재를 영입한 일이 아직까지 없었습니다"}, {"id": "SEL-IR-01", "comp": "IR", "method": "SEL", "n": 12, "text": "최근 6개월간 번레이트(월 현금 소진액)와 잔여 런웨이를 계산해 기록으로 남긴 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-ST-01", "comp": "ST", "method": "SEL", "n": 13, "text": "최근 3개월간 중요한 의사결정에서 2개 이상의 대안을 문서로 비교한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "최근 3개월간 그만한 무게의 의사결정이 아직까지 없었습니다"}, {"id": "SJT-FM-01", "comp": "FM", "method": "SJT", "n": 14, "text": "자금난으로 이번 달 팀 급여의 일부만 지급 가능합니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "아무에게도 알리지 않고 대표 급여만 삭감해 메운다"}, {"key": "B", "text": "지급 지연 사실과 사유·일정을 사전에 고지하고, 법이 정한 절차와 동의 요건을 확인한 뒤 현금 보전 대안을 함께 제시한다"}, {"key": "C", "text": "대출로 전액 지급하고 위기 상황은 알리지 않는다"}, {"key": "D", "text": "무급을 통보하고 각자 판단에 맡긴다"}]}, {"id": "SJT-EC-01", "comp": "EC", "method": "SJT", "n": 15, "text": "3개 스프린트 연속으로 계획한 목표의 절반만 완료되고 있습니다. 팀원들은 각자 바쁘다고 말합니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "달성 가능한 수준으로 목표치를 낮춘다"}, {"key": "B", "text": "미완료 항목의 지연 원인을 유형별로 분류해 병목을 특정하고, 다음 스프린트에서 그 원인 하나만 제거하는 실험을 한다"}, {"key": "C", "text": "인력을 충원한다"}, {"key": "D", "text": "개인별 완료율을 공개해 경쟁을 유도한다"}]}, {"id": "SJT-CU-02", "comp": "CU", "method": "SJT", "n": 16, "text": "초기 유료고객 1곳이 큰 금액을 제시하며 자사 전용 커스터마이징을 요구합니다. 제품 로드맵과는 어긋납니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "매출을 위해 요구를 전면 수용한다"}, {"key": "B", "text": "로드맵 정합성과 기회비용을 산정한 뒤 공용화 가능한 범위만 반영하고, 나머지는 유상 별도 계약으로 분리한다"}, {"key": "C", "text": "제품 원칙을 지키기 위해 전면 거절한다"}, {"key": "D", "text": "전담 SI 조직을 신설해 수주한다"}]}, {"id": "SJT-MI-02", "comp": "MI", "method": "SJT", "n": 17, "text": "경쟁사가 우리 제품이 자사 특허를 침해했다고 주장하는 내용증명을 보냈습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "무시하고 사업을 계속한다"}, {"key": "B", "text": "관련 자료를 보전한 뒤 전문가 검토로 침해 여부를 확인하고, 회피설계·라이선스·대응을 사업 연속성 기준으로 결정한다"}, {"key": "C", "text": "즉시 해당 기능을 삭제한다"}, {"key": "D", "text": "맞소송으로 대응한다"}]}, {"id": "SJT-TC-01", "comp": "TC", "method": "SJT", "n": 18, "text": "실험실에서 검증한 성능이 양산 공정에서는 재현되지 않아 수율이 목표의 절반입니다. 고객사 납품 일정은 두 달 남았습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "현재 수율로 납품하고 개선은 이후에 진행한다"}, {"key": "B", "text": "수율 저하의 지배 인자를 공정 변수별로 분리 검증하고, 고객사에 사양·일정 조정안을 근거와 함께 제시한다"}, {"key": "C", "text": "납기를 맞추기 위해 사양을 낮춰 재협상한다"}, {"key": "D", "text": "외부 위탁생산으로 전환한다"}]}, {"id": "SJT-TB-01", "comp": "TB", "method": "SJT", "n": 19, "text": "공동창업자가 개인 사정으로 근로 시간을 절반으로 줄이겠다고 통보했습니다. 지분은 5:5입니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "동등 지분을 그대로 유지한다"}, {"key": "B", "text": "기여도 변화와 지분·베스팅 조정을 당사자와 협의하고, 법률 자문을 거쳐 문서화한다"}, {"key": "C", "text": "즉시 퇴사를 권고한다"}, {"key": "D", "text": "대표자가 업무 가중을 감수하고 넘어간다"}]}, {"id": "SJT-IR-01", "comp": "IR", "method": "SJT", "n": 20, "text": "예상보다 30% 낮은 밸류의 텀시트를 받았습니다. 런웨이는 5개월 남았습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "조건을 받아들일 수 없어 거절하고 더 좋은 조건을 기다린다"}, {"key": "B", "text": "희석 영향·마일스톤·부수 조항 전체를 계산해 협상하되, 대안 자금원을 병행 타진한다"}, {"key": "C", "text": "즉시 무조건 수용한다"}, {"key": "D", "text": "브릿지론으로만 버틴다"}]}, {"id": "SJT-IR-02", "comp": "IR", "method": "SJT", "n": 21, "text": "핵심 투자자가 '공동창업자 중 1인을 교체해야 투자하겠다'는 조건을 제시했습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "투자를 위해 즉시 교체를 통보한다"}, {"key": "B", "text": "지적된 문제의 사실 여부를 먼저 검증하고, 당사자 협의와 이사회 절차를 거쳐 결정한다"}, {"key": "C", "text": "조건을 거절하고 투자를 포기한다"}, {"key": "D", "text": "투자자에게 알리지 않고 해당 창업자를 실무에서 배제한다"}]}, {"id": "SJT-ST-01", "comp": "ST", "method": "SJT", "n": 22, "text": "런웨이가 3개월 남았고, 제품 출시는 연기되었으며 브릿지 투자가 전면 거절되었습니다. 가장 적절한 첫 조치는?", "options": [{"key": "A", "text": "미완성 제품을 즉시 출시한다"}, {"key": "B", "text": "현금 소진 시점을 다시 산정해 이해관계자에게 고지하고, 법이 정한 절차 안에서 비용 구조 조정안을 마련한다"}, {"key": "C", "text": "브릿지론을 타진한다"}, {"key": "D", "text": "외주 용역 수주로 현금을 확보한다"}]}, {"id": "SJT-CU-01", "comp": "CU", "method": "SJT", "n": 23, "text": "핵심 고객군이 설문에서 'A 기능이 꼭 필요하다'고 답했으나, 실제 사용 로그에서는 아무도 A를 쓰지 않습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "설문 응답대로 A 기능을 고도화한다"}, {"key": "B", "text": "사용 로그를 우선 근거로 삼고, 소수 심층 인터뷰로 불일치 원인을 규명한다"}, {"key": "C", "text": "설문 응답자 중 실제 사용자를 식별해 재확인하고, 질문 설계를 고쳐 다시 조사한다"}, {"key": "D", "text": "판단을 유보하고 매출에 직결되는 다른 기능에 집중한다"}]}, {"id": "SJT-CU-03", "comp": "PC", "method": "SJT", "n": 24, "text": "가입자는 늘지만 4주 리텐션이 15%로 낮고, 대신 10%의 열성 사용자가 매일 접속합니다. 가장 적절한 우선순위는?", "options": [{"key": "A", "text": "신규 유입 마케팅을 확대한다"}, {"key": "B", "text": "열성 사용자군을 세분해 공통 사용맥락을 분석하고 핵심가치를 재정의한다"}, {"key": "C", "text": "리텐션이 낮으므로 피벗한다"}, {"key": "D", "text": "이탈 코호트와 잔존 코호트의 차이를 먼저 측정해 판단 근거를 확보한다"}]}, {"id": "SJT-MI-01", "comp": "MI", "method": "SJT", "n": 25, "text": "대기업이 우리와 유사한 기능을 무료로 번들 출시했습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "즉시 가격을 인하해 맞대응한다"}, {"key": "B", "text": "대기업이 진입하지 않는 좁은 시장·심층 가치로 재포지셔닝한다"}, {"key": "C", "text": "해당 시장을 포기하고 인접한 문제 영역으로 전환한다"}, {"key": "D", "text": "기능을 추가해 경쟁한다"}]}, {"id": "SJT-ST-03", "comp": "ST", "method": "SJT", "n": 26, "text": "경쟁사가 대규모 투자를 유치해 공격적 마케팅으로 시장을 잠식 중입니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "자금을 추가 조달해 마케팅으로 맞대응한다"}, {"key": "B", "text": "방어 가능한 핵심 세그먼트에 자원을 집중하고 해자를 강화한다"}, {"key": "C", "text": "관망한다"}, {"key": "D", "text": "즉시 매각을 추진한다"}]}, {"id": "PATH-01", "comp": "PATH", "method": "SEL", "n": 27, "text": "앞으로 1~2년, 귀사의 성장을 어느 쪽으로 끌고 가실 계획입니까?", "scale": "path3", "options": ["투자주도 — 외부투자를 받아 인재와 개발에 먼저 투입하고 시장을 선점한다", "매출주도 — 고객과 초기 매출로 검증한 뒤 그 현금으로 확장한다", "기술사업화 — 연구개발과 특허를 먼저 쌓고 기술이전·공동개발로 진입한다"], "keys": ["A", "B", "C"]}, {"id": "SEL-FM-04", "comp": "FM", "method": "SEL", "n": 28, "text": "나는 창업을 결심한 이후 자금·팀 문제로 단 한 번도 심각한 스트레스나 두려움을 느낀 적이 없다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-CU-04", "comp": "CU", "method": "SEL", "n": 29, "text": "우리 제품은 충분히 좋기 때문에 고객 인터뷰를 자주 할 필요가 없다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-RI-01", "comp": "RI", "method": "SEL", "n": 30, "text": "충북 전략산업(반도체·이차전지·바이오·AI·모빌리티·양자) 클러스터와의 협력 계획·경험이 있다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}], "conditions": [{"id": "COND-TECH-01", "title": "기술 진입장벽 유형", "question": "귀사의 제품·서비스는 고객에게 판매되기까지 어떤 검증을 거칩니까?", "lead": "아래 기준을 먼저 읽고 고르십시오. 어느 쪽이 우월하다는 뜻이 아니라, 경쟁 상황에서 취할 수 있는 대응이 달라지기 때문에 묻는 것입니다.", "groups": [{"key": "defensible_by_technology", "label": "기술 검증형 — 판매 전에 인증·허가나 임상, 또는 수요처의 자체 검증을 거쳐야 합니다", "criteria": ["판매 전에 법으로 정해진 인증·허가를 받아야 한다 (식약처 품목허가·GMP·KC·KS·환경인증 등)", "안전성·유효성을 임상 또는 비임상 시험으로 입증해야 한다", "수요처가 도입 전에 자체 검증(PoC·퀄테스트·실증)을 요구하고, 그 기간이 3개월 이상이다", "실험실에서 낸 성능을 양산에서 재현하려면 별도의 공정 개발이 필요하다", "핵심 기능이 특허나 표준으로 보호되어 우회설계에 상당한 비용과 기간이 든다"], "rule": "위 다섯 가운데 **하나라도 해당하면** 이쪽입니다."}, {"key": "feature_substitutable", "label": "기능 대체형 — 별도 인증이나 고객사 검증 없이 바로 쓸 수 있습니다", "criteria": ["고객이 가입·구매 직후 바로 사용한다", "규제나 인증이 없거나 형식적인 절차에 그친다", "경쟁 제품이 같은 기능을 3~6개월 안에 붙일 수 있다", "고객이 지금 쓰는 대체 수단이 이미 여럿 있다 (엑셀·수기·다른 앱 등)"], "rule": "위 기준에 주로 해당하면 이쪽입니다."}], "exclusions": {"title": "진입장벽으로 세지 않는 것", "note": "**돈이 많이 든다고 기술 진입장벽이 아닙니다. 기술을 검증받는 데 드는 비용만 해당합니다.** 아래는 자본력이나 사업 규모의 문제이지 기술 장벽이 아닙니다.", "items": ["마케팅·광고 비용", "초기 사용자·가입자 확보 비용", "브랜드 인지도", "개발 인건비 자체", "영업 조직 구축 비용"]}, "examples": [{"업종": "바이오·제약", "판정": "defensible_by_technology", "이유": "비임상·임상으로 안전성과 유효성을 입증해야 하며 여기에 수년과 상당한 비용이 든다. 이 비용은 기술 검증에 직접 쓰이므로 진입장벽으로 본다. **판매 이후의 마케팅 비용은 제외한다.**"}, {"업종": "의료기기", "판정": "defensible_by_technology", "이유": "식약처 품목허가와 GMP 인증을 통과해야 판매할 수 있다."}, {"업종": "반도체 소부장", "판정": "defensible_by_technology", "이유": "수요처(소자·장비사)의 퀄테스트가 통상 6~18개월 걸리고, 통과 전에는 납품이 불가하다."}, {"업종": "이차전지 소재", "판정": "defensible_by_technology", "이유": "셀 메이커의 평가 절차를 거쳐야 하며 공정 재현성 확보에 별도 개발이 든다."}, {"업종": "공공 실증형 기술(환경·에너지·안전)", "판정": "defensible_by_technology", "이유": "실증 사업과 성능 인증을 거쳐야 조달·납품이 열린다."}, {"업종": "일반 B2C 앱·커머스", "판정": "feature_substitutable", "이유": "인증 절차가 없고 사용자가 내려받아 바로 쓴다. 대체 수단도 여럿이다."}, {"업종": "일반 업무용 B2B SaaS", "판정": "feature_substitutable", "이유": "도입 검증이 짧고, 같은 기능을 제공하는 대체 서비스가 이미 있다."}, {"업종": "AI 서비스", "판정": "갈린다 — 기준으로 판단할 것", "이유": "의료 AI·금융 AI는 인허가와 감독 규제가 걸려 기술 검증형이고, 일반 생산성 도구는 기능 대체형이다. **업종 이름이 아니라 위 기준으로 고르십시오.**"}], "note": ""}, {"id": "COND-LOG-01", "title": "고객 행동 데이터 축적 여부", "question": "고객이 제품을 쓰는 과정이 데이터로 쌓입니까?", "lead": "고객의 말과 실제 행동이 어긋날 때, 무엇을 먼저 근거로 삼을지가 달라지기 때문에 묻습니다.", "groups": [{"key": "behavioral_log_available", "label": "쌓입니다 — 사용 기록이 자동으로 남아 언제 무엇을 했는지 확인할 수 있습니다", "criteria": ["제품이 소프트웨어·앱·웹이고 사용자 행동이 자동으로 기록된다", "고객이 주 1회 이상 반복해서 사용한다", "이탈·재방문·기능별 사용 여부를 지금 조회할 수 있다"], "rule": ""}, {"key": "low_frequency_b2b", "label": "쌓이지 않습니다 — 구매·사용이 드물거나 오프라인이라 과정을 데이터로 볼 수 없습니다", "criteria": ["고객이 연 1~2회 구매한다 (장비·원료·수주형 납품)", "오프라인 대면으로 제공되어 사용 과정이 기록되지 않는다", "사용자와 구매 결정자가 달라 실제 사용 양상을 알기 어렵다"], "rule": ""}], "exclusions": null, "examples": [{"업종": "B2C 앱·구독형 서비스", "판정": "behavioral_log_available", "이유": "접속·기능 사용이 자동 기록되고 반복 사용된다."}, {"업종": "업무용 SaaS", "판정": "behavioral_log_available", "이유": "계정별 사용 로그가 남는다. 다만 구매 결정자와 사용자가 다르면 해석에 주의가 필요하다."}, {"업종": "산업 장비·소재 납품", "판정": "low_frequency_b2b", "이유": "구매 주기가 길고 사용은 고객사 공정 안에서 일어나 기록이 우리에게 오지 않는다."}, {"업종": "바이오·제약", "판정": "low_frequency_b2b", "이유": "처방·투여 기록은 의료기관에 남고 기업이 직접 조회할 수 없다."}, {"업종": "오프라인 서비스·시공", "판정": "low_frequency_b2b", "이유": "대면 제공이라 사용 과정이 데이터로 남지 않는다."}], "note": ""}, {"id": "COND-STAGE-01", "title": "유료 매출 발생 여부", "question": "지금까지 고객에게 대가를 받고 제품·서비스를 판매한 적이 있습니까?", "lead": "🔴 이 질문을 「PMF 전후」라고 부르지 않습니다. PMF의 판정 기준 자체가 문헌상 미해결이라 그렇게 부르면 조건이 새 논쟁이 되고, 좋게 답하고 싶어지는 문항이 됩니다. 관측 가능한 사실로만 묻습니다.", "groups": [{"key": "pre_revenue", "label": "아직 없습니다 — 무상 제공·시범 운영·정부 과제 수행만 있었습니다", "criteria": ["고객이 대가를 지불한 판매 실적이 없다", "정부 R&D 과제비·수상금은 매출로 세지 않는다", "무상 시범 운영(파일럿)은 매출로 세지 않는다"], "rule": ""}, {"key": "post_revenue", "label": "있습니다 — 대가를 받고 판매한 실적이 있습니다", "criteria": ["금액과 무관하게 고객이 지불한 판매 건이 있다", "용역·수주 매출도 포함한다"], "rule": ""}], "exclusions": null, "examples": [], "note": "판정은 자가보고입니다. 매출 여부를 확인할 수 있는 무료 외부 자료는 없습니다 (국세청은 계속사업자 여부만, 국민연금·근로복지공단은 인원만, DART는 외감법인만 수록)."}], "na_key": "NA"};
+const QS = new URLSearchParams(location.search);
+const LOCAL = QS.has('local');
+const ADMIN = QS.has('admin');
+const KEY = 'fia30:' + DATA.meta.id;
+const $ = s => document.querySelector(s);
+const app = $('#app');
+const esc = s => String(s == null ? '' : s)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b style="color:var(--ink)">$1</b>');
+
+/* ── 상태 ── */
+const BLANK = {screen:'landing', cid:'', code:'', consent:{c1:0,c2:0,c3:0,c4:0},
+  who:{name:'',title:''}, cond:{}, ans:{}, dwell:{}, page:0, started:0, result:null};
+let S = load();
+function load(){ try{ return Object.assign({}, BLANK, JSON.parse(localStorage.getItem(KEY)||'{}')); }
+  catch(e){ return Object.assign({}, BLANK); } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function reset(){ localStorage.removeItem(KEY); S = Object.assign({}, BLANK); go('landing'); }
+function go(s){ S.screen = s; save(); render(); window.scrollTo(0,0); }
+
+/* 초기화 — 되돌릴 수 없으니 무엇이 지워지는지 세어서 보여주고 묻는다 */
+function askReset(){
+  const n = answered();
+  const msg = n
+    ? `응답한 ${n}문항과 접속 정보가 이 브라우저에서 지워집니다.\n`
+      + `제출을 마친 회차는 서버에 남아 있어 지워지지 않습니다.\n\n초기화하시겠습니까?`
+    : '접속 정보를 지우고 처음 화면으로 돌아갑니다.\n\n초기화하시겠습니까?';
+  if(confirm(msg)) reset();
+}
+
+/* ── 관리자 상태 ──
+   기업 응답 상태(S)와 섞지 않는다. 같은 브라우저에서 진단을 받아 본 뒤
+   대시보드를 열면 응답이 덮어써진다.
+   세션 저장소를 쓰므로 탭을 닫으면 로그아웃된다. */
+const AKEY = KEY + ':adm';
+const ABLANK = {screen:'adminLogin', token:'', tab:'task'};
+let A = Object.assign({}, ABLANK);
+try{ A = Object.assign(A, JSON.parse(sessionStorage.getItem(AKEY)||'{}')); }catch(e){}
+A.list = null; A.view = null; A.open = '';
+function asave(){ try{ sessionStorage.setItem(AKEY,
+  JSON.stringify({screen:A.screen, token:A.token, tab:A.tab})); }catch(e){} }
+function ago(s){ A.screen = s; asave(); render(); window.scrollTo(0,0); }
+
+/* 결과 렌더러는 기업·관리자 양쪽이 함께 쓴다 */
+const RES = () => ADMIN ? (A.view && A.view.result) : S.result;
+
+/* ── 문항 묶기 ── */
+const ITEMS = DATA.items;
+const PER = DATA.meta.per_page;
+const PAGES = Math.ceil(ITEMS.length / PER);
+const pageItems = p => ITEMS.slice(p*PER, p*PER+PER);
+const answered = () => ITEMS.filter(i => S.ans[i.id] !== undefined && S.ans[i.id] !== '').length;
+
+/* ── 화면 ── */
+const SCREENS = {};
+
+SCREENS.landing = () => `
+<section class="scr"><div class="wrap">
+  <div class="eyebrow">이노테크 참여기업 대상 · 2026</div>
+  <h1 class="h-xl">${esc(DATA.meta.minutes)}분이면 확인하는<br>우리 회사의 준비 상태</h1>
+  <p class="lead">등급을 매기지 않습니다. 지금 무엇을 보완해야 하는지 목록을 만듭니다.
+     ${DATA.meta.count}개 문항에 답하시면 즉시 결과와 보완 과제가 나옵니다.</p>
+  <div class="row">
+    <button class="btn" id="goLogin">진단 시작하기</button>
+    <button class="btn ghost" id="goResume">이어서 응답하기</button>
+    ${(S.cid || answered()) ? `<span class="sp"></span>
+      <button class="btn ghost sm" id="doReset">초기화</button>` : ''}
+  </div>
+  ${(S.cid || answered()) ? `<p class="muted">이 브라우저에 ${esc(S.cid||'')}
+     ${answered() ? `· 응답 ${answered()}문항` : ''}이 남아 있습니다.
+     다른 분이 이어서 쓰시려면 초기화해 주십시오.</p>` : ''}
+  <div class="card">
+    <div class="kv"><b>구성</b><span>${DATA.meta.count}문항 · 전부 선택형 · 9개 영역</span></div>
+    <div class="kv"><b>소요</b><span>${esc(DATA.meta.minutes)}분 · 중간에 닫아도 이어서 응답</span></div>
+    <div class="kv"><b>결과</b><span>응답 즉시 · 종합점수와 영역별 구간 · 보완 과제와 실행 도구</span></div>
+  </div>
+  <div class="card"><h3 class="h-m">자주 묻는 질문</h3>
+    <p style="font-size:14px;margin:10px 0"><b style="color:var(--ink)">접속 코드는 어디서 받나요</b><br>
+      이노테크 접수 기업에는 운영기관이 접수번호와 코드를 일괄 발급합니다. 분실하신 경우 운영기관으로 문의해 주십시오.</p>
+    <p style="font-size:14px;margin:10px 0"><b style="color:var(--ink)">심사에 반영되나요</b><br>
+      반영하지 않습니다. 심사·선정 판단이나 지원 배분의 근거로 사용하지 않으며, 등급을 매겨 통보하지도 않습니다.</p>
+    <p style="font-size:14px;margin:10px 0"><b style="color:var(--ink)">예비창업도 할 수 있나요</b><br>
+      가능합니다. 다만 매출·고객·팀 운영 경험을 전제한 문항이 많아 결과가 실제 역량보다 낮게 나올 수 있습니다.</p>
+  </div>
+</div></section>`;
+
+SCREENS.login = () => `
+<section class="scr"><div class="wrap" style="max-width:460px">
+  <div class="eyebrow">접속</div>
+  <h1 class="h-l">접속 코드 입력</h1>
+  <p class="lead">운영기관이 발급한 접수번호와 코드를 입력해 주십시오.</p>
+  <div class="card">
+    <label class="f" for="fCid">접수번호</label>
+    <input type="text" id="fCid" placeholder="ITC2026-000" value="${esc(S.cid)}" autocomplete="off">
+    <label class="f" for="fCode">접속 코드</label>
+    <input type="text" id="fCode" placeholder="6자리" value="${esc(S.code)}" autocomplete="off">
+    <div class="err hide" id="loginErr"></div>
+    <div class="row"><button class="btn" id="doLogin">확인</button>
+      <button class="btn ghost" id="backLanding">뒤로</button>
+      <span class="sp" style="flex:1"></span>
+      <button class="btn ghost sm" id="doReset">초기화</button></div>
+  </div>
+  <p class="muted">코드를 분실하신 경우 운영기관으로 문의해 주십시오. 재발송 기능은 제공하지 않습니다.<br>
+     접속은 12시간 유지되며, 중간에 닫아도 이어서 응답하실 수 있습니다.</p>
+</div></section>`;
+
+SCREENS.intro = () => `
+<section class="scr"><div class="wrap">
+  ${stepbar(1)}
+  <h1 class="h-l" style="margin-top:18px">시작 전 안내</h1>
+  <div class="card warn">
+    <h3 class="h-m" style="color:var(--warn)">한계 — 먼저 알고 응답할 것</h3>
+    <p style="font-size:14px;margin:8px 0"><b style="color:var(--ink)">전부 자가보고입니다.</b>
+      외부 자료와 대조하지 않으므로 결과의 정확도는 응답의 솔직함에 좌우됩니다.
+      바람직해 보이는 선택지가 아니라 실제로 하고 있는 행동을 고를 때만 쓸모가 있습니다.</p>
+    <p style="font-size:14px;margin:8px 0"><b style="color:var(--ink)">비교 기준이 아직 없습니다.</b>
+      응답 표본이 300건에 이르기 전까지 점수 구간 경계는 잠정값입니다.
+      다른 기업과 견준 값이 아니라 기준선에 견준 값으로 읽으시기 바랍니다.</p>
+    <p style="font-size:14px;margin:8px 0"><b style="color:var(--ink)">사업 아이템의 성패를 예측하지 않습니다.</b>
+      대표와 팀의 준비 상태를 보는 도구이며, 사업의 성공 가능성을 판정하지 않습니다.</p>
+    <p style="font-size:14px;margin:8px 0"><b style="color:var(--ink)">${DATA.meta.count}문항은 개괄입니다.</b>
+      영역당 3문항 안팎이라 영역 안의 세부 차이는 잡히지 않습니다.</p>
+  </div>
+  <div class="card"><h3 class="h-m">이 진단이 무엇인지</h3>
+    <p style="font-size:14px">창업기업 대표가 자신과 팀의 준비 상태를 스스로 점검하는 도구입니다.
+      9개 역량 영역을 ${DATA.meta.count}개 문항으로 개괄하며 소요 시간은 ${esc(DATA.meta.minutes)}분입니다.
+      문항은 모두 선택형이고 응답 즉시 결과가 나옵니다.</p>
+    <h3 class="h-m" style="margin-top:16px">어디에 쓰이고, 어디에 쓰이지 않는지</h3>
+    <ul class="tight">
+      <li>기업이 자기 상태를 확인하고 다음 과제를 정하는 데 씁니다</li>
+      <li>멘토·IR 컨설턴트·운영기관이 상태를 참고해 추가 멘토링·컨설팅을 연결하는 데 씁니다</li>
+      <li><b style="color:var(--ink)">심사·선정 판단에 반영하지 않습니다</b></li>
+      <li><b style="color:var(--ink)">지원 배분의 근거로 쓰지 않습니다</b></li>
+      <li><b style="color:var(--ink)">등급을 매겨 통보하지 않습니다</b></li>
+    </ul>
+  </div>
+  <div class="card"><h3 class="h-m">이용 대상 — 사업자등록을 마친 기업</h3>
+    <p style="font-size:14px">본 진단은 사업자등록 후 실제 운영을 시작한 기업을 기준으로 설계되었습니다.
+      문항의 상당수가 매출·고객·팀 운영 경험을 전제하며, 경영지표 항목은 판매 실적이 있어야 값이 생깁니다.
+      예비창업 단계에서는 결과가 실제 역량보다 낮게 나올 수 있습니다.
+      이는 역량 부족이 아니라 아직 해당 활동을 시작하기 전이기 때문입니다.</p>
+  </div>
+  <div class="row"><button class="btn ghost" id="backLogin">뒤로</button>
+    <button class="btn" id="toConsent">읽었습니다 · 동의 단계로</button></div>
+</div></section>`;
+
+const CONSENT = [
+ {k:'c1', t:'① 수집·이용', d:'문항별 개별 응답 · 문항별 응답 소요시간 · 응답 패턴 분석 결과 · 산출 점수와 역량별 구간 · 직접 입력한 경영지표 · 응답자 이름과 직위'},
+ {k:'c2', t:'② 열람 범위', d:'귀사(대표·응답자) / 운영기관(충북대학교기술지주 담당자) / 귀사에 연결된 조력자(멘토·IR 컨설턴트). 열람은 <b>문항별 응답과 응답 패턴을 포함</b>합니다. 조력자가 남기는 내부 검토 메모는 운영 관리 목적으로만 사용하며 귀사에 제공하지 않습니다.<br><b>본 진단 결과는 심사·선정 판단이나 지원 배분의 근거로 사용하지 않습니다.</b>'},
+ {k:'c3', t:'③ 보관·파기', d:'응답 원본은 3년 보관 후 파기하며, 점수는 식별정보와 분리해 보존합니다.'},
+ {k:'c4', t:'④ 국외 이전', d:'저장·처리를 위해 아래 사업자에게 이전됩니다.<br>· Google LLC (미국) — 응답·점수 보관 · 제출 즉시 이전 · 보유는 위 ③과 같음<br>· Notion Labs, Inc. (미국) — 기업명·응답자·점수·처방 내역 열람용<br>이전을 원하지 않으시면 진단에 참여하지 않으실 수 있습니다.'}
+];
+
+SCREENS.consent = () => `
+<section class="scr"><div class="wrap">
+  ${stepbar(2)}
+  <h1 class="h-l" style="margin-top:18px">수집·이용 동의</h1>
+  <div class="card">
+    <div class="chk" style="border-bottom:1px solid var(--line);padding-bottom:14px">
+      <input type="checkbox" id="cAll"><div class="t"><b>아래 4개 항목에 모두 동의합니다</b></div></div>
+    ${CONSENT.map(c => `<div class="chk">
+      <input type="checkbox" class="c1" id="${c.k}" ${S.consent[c.k]?'checked':''}>
+      <div class="t"><b>${c.t}<span class="req">필수</span></b>${c.d}</div></div>`).join('')}
+  </div>
+  <div class="row"><button class="btn ghost" id="backIntro">뒤로</button>
+    <button class="btn" id="toWho" ${allConsent()?'':'disabled'}>동의하고 계속</button>
+    <span class="muted" id="cMsg">${allConsent()?'':'4개 항목에 모두 동의하셔야 다음으로 넘어갑니다.'}</span></div>
+</div></section>`;
+
+SCREENS.who = () => `
+<section class="scr"><div class="wrap">
+  ${stepbar(3)}
+  <h1 class="h-l" style="margin-top:18px">응답자 확인</h1>
+  <p class="lead">누가 답하셨는지에 따라 결과의 성격이 달라집니다.</p>
+  <div class="card">
+    <label class="f" for="wName">이름</label>
+    <input type="text" id="wName" value="${esc(S.who.name)}" autocomplete="off">
+    <label class="f" for="wTitle">직위</label>
+    <input type="text" id="wTitle" value="${esc(S.who.title)}" placeholder="대표 · 이사 · 팀장 등" autocomplete="off">
+  </div>
+  ${DATA.conditions.map(condCard).join('')}
+  <div class="row"><button class="btn ghost" id="backConsent">뒤로</button>
+    <button class="btn" id="toSurvey">진단 시작</button>
+    <span class="muted" id="wMsg"></span></div>
+</div></section>`;
+
+function condCard(c){
+  return `<div class="cond" data-cond="${esc(c.id)}">
+    <h4>${esc(c.question)}</h4>
+    ${c.lead ? `<p class="muted" style="margin-bottom:10px">${esc(c.lead)}</p>` : ''}
+    <div class="opts">
+      ${c.groups.map(g => `<label class="opt ${S.cond[c.id]===g.key?'on':''}">
+        <input type="radio" name="${esc(c.id)}" value="${esc(g.key)}" ${S.cond[c.id]===g.key?'checked':''}>
+        <span>${esc(g.label)}</span></label>`).join('')}
+    </div>
+    ${c.groups.filter(g=>g.criteria.length).map(g => `<div class="crit">
+      <b>${esc(g.label.split('—')[0].trim())} 판단 기준</b>
+      <ul>${g.criteria.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+      ${g.rule?`<div style="margin-top:6px">${md(g.rule)}</div>`:''}</div>`).join('')}
+    ${c.exclusions ? `<div class="excl"><b>${esc(c.exclusions.title)}</b><br>${md(c.exclusions.note)}
+      <ul style="margin:6px 0 0 17px">${c.exclusions.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+    ${c.examples.length ? `<details style="margin-top:8px"><summary class="muted" style="cursor:pointer">업종 예시 보기</summary>
+      <table class="ex"><thead><tr><th>업종</th><th>판정</th><th>이유</th></tr></thead><tbody>
+      ${c.examples.map(e=>`<tr><td>${esc(e['업종'])}</td><td>${esc(e['판정'])}</td><td>${esc(e['이유'])}</td></tr>`).join('')}
+      </tbody></table></details>` : ''}
+    ${c.note ? `<p class="muted" style="margin-top:8px">${esc(c.note)}</p>` : ''}
+  </div>`;
+}
+
+SCREENS.survey = () => {
+  const p = S.page, list = pageItems(p);
+  return `<section class="scr"><div class="wrap">
+    ${stepbar(4)}
+    <div style="display:flex;align-items:baseline;gap:10px;margin-top:14px">
+      <h2 class="h-m" style="margin:0">${p+1} / ${PAGES}단계</h2>
+      <span class="muted">응답 ${answered()} / ${ITEMS.length}문항 · 자동 저장됨</span>
+    </div>
+    <div class="bar"><i style="width:${Math.round(answered()/ITEMS.length*100)}%"></i></div>
+    <div class="card">${list.map(qHTML).join('')}</div>
+    <div class="row">
+      <button class="btn ghost" id="prevPage" ${p===0?'disabled':''}>이전 ${PER}문항</button>
+      <div class="sp"></div>
+      <span class="muted" id="sMsg"></span>
+      <button class="btn" id="nextPage">${p===PAGES-1?'응답 제출':'다음 '+PER+'문항'}</button>
+    </div>
+    <p class="muted" style="margin-top:12px">응답은 자동 저장됩니다. 중간에 닫으셔도 같은 코드로 이어서 응답하실 수 있습니다.
+      모든 문항에 답하셔야 다음 단계로 넘어갑니다.</p>
+  </div></section>`;
+};
+
+function qHTML(it){
+  const cur = S.ans[it.id];
+  const sel = it.method === 'SEL';
+  const opts = sel
+    ? `<div class="scale5">${it.options.map((t,i)=>optHTML(it.id, String(i+1), t, cur)).join('')}</div>`
+    : `<div class="opts">${it.options.map(o=>optHTML(it.id, o.key, o.text, cur)).join('')}</div>`;
+  const na = it.na ? `<div class="opts" style="margin-top:8px">
+      ${optHTML(it.id, DATA.na_key, it.na, cur, 'na')}</div>` : '';
+  return `<div class="q" data-q="${esc(it.id)}">
+    <div class="no">${it.n}. ${esc(DATA.names_ko[it.comp]||it.comp)}</div>
+    <div class="qt">${esc(it.text)}</div>${opts}${na}</div>`;
+}
+function optHTML(qid, val, text, cur, cls){
+  return `<label class="opt ${cls||''} ${cur===val?'on':''}">
+    <input type="radio" name="${esc(qid)}" value="${esc(val)}" ${cur===val?'checked':''}>
+    <span>${esc(text)}</span></label>`;
+}
+
+SCREENS.scoring = () => `
+<section class="scr"><div class="wrap" style="max-width:460px;text-align:center;padding-top:80px">
+  <h2 class="h-l">응답을 채점하고 있습니다</h2>
+  <p class="lead">수 초에서 수십 초가 걸립니다. 창을 닫지 말고 잠시 기다려 주십시오.</p>
+  <div class="card" style="text-align:left" id="scoreLog"></div>
+  <div class="err hide" id="scoreErr"></div>
+</div></section>`;
+
+SCREENS.result = () => {
+  const r = RES();
+  if(!r) return `<section class="scr"><div class="wrap"><p class="lead">결과가 없습니다.</p>
+    <div class="row"><button class="btn ghost" id="backLanding">처음으로</button></div></div></section>`;
+  const cs = r.scores.competencies;
+  return `
+  <div class="res-head"><div class="wide">
+    <div class="stamp">${esc(DATA.meta.watermark)} — 구간 경계는 잠정값입니다(응답 표본 300건 미만). 다른 기업과 견준 값이 아닙니다.</div>
+    <div style="display:flex;align-items:flex-end;gap:26px;margin-top:14px;flex-wrap:wrap">
+      <div><div class="muted">${esc(r.meta.company||'')} · ${esc(r.meta.cid||'')} · ${esc(r.meta.answered_at||'')}
+        · 응답자 ${esc((r.meta.respondent||{}).name||'')} ${esc((r.meta.respondent||{}).title||'')}</div>
+        <h1 class="h-l" style="margin:4px 0 0">진단 결과</h1></div>
+      <div class="sp" style="flex:1"></div>
+      <div style="text-align:right"><div class="muted">종합점수</div>
+        <div class="score-big">${esc(r.scores.total)}</div>
+        <div class="bands" style="justify-content:flex-end">
+          <span class="pill p-w">보완 ${r.scores.bands['보완']||0}</span>
+          <span class="pill p-m">보통 ${r.scores.bands['보통']||0}</span>
+          <span class="pill p-g">강점 ${r.scores.bands['강점']||0}</span></div></div>
+    </div>
+    <div class="tabs">
+      <div class="tab on" data-tab="task">보완 과제</div>
+      <div class="tab" data-tab="notes">읽으실 때 감안할 점</div>
+      <div class="tab" data-tab="metric">경영지표</div>
+      ${ADMIN ? '<div class="tab" data-tab="answers">문항별 응답</div>'
+              : '<div class="tab" data-tab="next">70문항 정밀진단</div>'}
+      <div class="sp" style="flex:1"></div>
+      ${ADMIN ? '<div class="tab" id="toDash">← 대시보드</div>' : ''}
+      <div class="tab" id="dlPdf">PDF 내려받기</div>
+    </div>
+  </div></div>
+  <section class="scr"><div class="wide"><div class="grid3">
+    <div><div class="card">${radar(cs)}
+      ${cs.map(c=>`<div class="comp-row"><span class="nm">${esc(c.name)}</span>
+        <span class="pill ${c.band==='보완'?'p-w':c.band==='강점'?'p-g':'p-m'}">${esc(c.band)}</span>
+        <span class="sc">${c.score==null?'—':c.score}</span></div>`).join('')}
+      <p class="muted" style="margin-top:10px">축의 크기는 구간 위치를 보여주는 표시입니다.
+        RI(지역혁신)는 총점 미산입이라 표시하지 않습니다.</p></div></div>
+    <div id="paneMain"></div>
+    <div id="paneSide"></div>
+  </div></div></section>`;
+};
+
+function radar(cs){
+  const list = cs.filter(c => c.score != null && c.code !== 'RI');
+  const n = list.length, cx=160, cy=150, rr=110;
+  const pt = (i, v) => { const a = -Math.PI/2 + i*2*Math.PI/n, r = rr*Math.max(.08, v/100);
+    return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; };
+  const web = [25,50,75,100].map(v => `<polygon points="${list.map((_,i)=>pt(i,v).join(',')).join(' ')}"
+    fill="none" stroke="var(--line)" stroke-width="1"/>`).join('');
+  const poly = `<polygon points="${list.map((c,i)=>pt(i,c.score).join(',')).join(' ')}"
+    fill="rgba(168,38,90,.14)" stroke="var(--brand)" stroke-width="2"/>`;
+  const labels = list.map((c,i)=>{ const [x,y]=pt(i,118);
+    return `<text x="${x}" y="${y}" font-size="10.5" fill="var(--sub)" text-anchor="middle"
+      dominant-baseline="middle">${esc(c.name)}</text>`; }).join('');
+  return `<svg viewBox="0 0 320 300" style="width:100%;height:auto">${web}${poly}${labels}</svg>`;
+}
+
+SCREENS.done = () => `<section class="scr"><div class="wrap">
+  <h1 class="h-l">제출이 끝났습니다</h1>
+  <p class="lead">결과는 위 화면에서 확인하실 수 있습니다.</p>
+  <div class="row"><button class="btn ghost" id="backLanding">처음으로</button></div></div></section>`;
+
+/* ══════════════ 관리자 대시보드 ══════════════ */
+
+SCREENS.adminLogin = () => `
+<section class="scr"><div class="wrap" style="max-width:420px;padding-top:40px">
+  <div class="eyebrow">운영기관 전용</div>
+  <h1 class="h-l">관리자 대시보드</h1>
+  <p class="lead">응답 이력과 결과를 열람합니다. 코드는 편집기에서 <code>showAdminCode()</code>로 확인하십시오.</p>
+  <div class="card">
+    <label class="f" for="fAdm">관리자 코드</label>
+    <input type="password" id="fAdm" placeholder="6자리" autocomplete="off">
+    <div class="err hide" id="admErr"></div>
+    <div class="row"><button class="btn" id="doAdmin">확인</button></div>
+  </div>
+  <p class="muted">여기서 보이는 응답과 소견은 기업 개인의 판단 기록입니다.
+     열람 범위 밖으로 옮기지 마십시오.</p>
+</div></section>`;
+
+SCREENS.admin = () => {
+  const L = A.list;
+  if(!L) return `<section class="scr"><div class="wrap" style="padding-top:40px">
+    <p class="lead">이력을 불러오는 중입니다.</p></div></section>`;
+  const t = L.totals || {};
+  const rows = (L.users||[]).map(u => {
+    const last = (u.history||[])[0];
+    const open = A.open === u.cid;
+    const head = `
+      <tr class="clk" data-cid="${esc(u.cid)}">
+        <td><b style="color:var(--ink)">${esc(u.cid)}</b></td>
+        <td>${esc(u.company) || '<span class="none">미기재</span>'}</td>
+        <td>${u.status === 'active' ? '<span class="tag">사용</span>'
+              : `<span class="tag off">${esc(u.status)}</span>`}</td>
+        <td class="num">${u.runs || '<span class="none">0</span>'}</td>
+        <td class="num">${last ? esc(last.total) : '<span class="none">—</span>'}</td>
+        <td>${last ? esc(last.ts) : '<span class="none">응답 없음</span>'}</td>
+        <td>${last ? esc(last.name) + ' ' + esc(last.title) : ''}</td>
+        <td class="num">${open ? '▲' : (u.runs ? '▼' : '')}</td>
+      </tr>`;
+    if(!open || !u.runs) return head;
+    const sub = (u.history||[]).map(h => `
+      <tr class="sub"><td></td><td colspan="7">
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <b style="color:var(--ink)">${h.run}회차</b>
+          <span class="muted">${esc(h.ts)}</span>
+          <span class="muted">${esc(h.name)} ${esc(h.title)}</span>
+          <span class="muted">${Math.round((h.elapsed||0)/60)}분</span>
+          <span>종합 <b style="color:var(--brand)">${esc(h.total)}</b></span>
+          <span class="pill p-w">보완 ${(h.bands||{})['보완']||0}</span>
+          <span class="pill p-m">보통 ${(h.bands||{})['보통']||0}</span>
+          <span class="pill p-g">강점 ${(h.bands||{})['강점']||0}</span>
+          ${(h.signals||[]).length ? `<span class="tag sig">응답 신호 ${h.signals.length}</span>` : ''}
+          <span class="sp" style="flex:1"></span>
+          <button class="btn sm openRun" data-cid="${esc(u.cid)}" data-run="${h.run}">결과 보기</button>
+        </div></td></tr>`).join('');
+    return head + sub;
+  }).join('');
+
+  return `
+  <div class="adm"><div class="in">
+    <b>관리자 대시보드</b><span>응답 이력 열람</span>
+    <div class="sp"></div>
+    <span id="admReload" style="cursor:pointer;text-decoration:underline">새로고침</span>
+    <span id="admOut" style="cursor:pointer;text-decoration:underline">나가기</span>
+  </div></div>
+  <section class="scr"><div class="wide">
+    <div class="card"><div class="stat">
+      <div><div class="muted">발급 기업</div><div class="n">${t.companies||0}</div></div>
+      <div><div class="muted">응답 기업</div><div class="n">${t.answered||0}</div></div>
+      <div><div class="muted">전체 회차</div><div class="n">${t.runs||0}</div></div>
+      <div><div class="muted">미응답</div><div class="n">${Math.max(0,(t.companies||0)-(t.answered||0))}</div></div>
+    </div></div>
+    <div class="card" style="padding:0;overflow-x:auto">
+      <table class="tbl"><thead><tr>
+        <th>접수번호</th><th>기업명</th><th>코드</th><th class="num">회차</th>
+        <th class="num">최근 종합</th><th>최근 응답</th><th>응답자</th><th></th>
+      </tr></thead><tbody>${rows || '<tr><td colspan="8" class="none">기업이 없습니다</td></tr>'}</tbody></table>
+    </div>
+    <p class="muted">줄을 누르면 회차가 펼쳐집니다. 결과는 저장된 원응답으로 그 자리에서 다시 채점합니다 —
+       처방 문구를 고치면 과거 회차도 새 문구로 보입니다.</p>
+  </div></section>`;
+};
+
+function paneAnswers(main, side, r){
+  const v = A.view || {};
+  const byId = {}; DATA.items.forEach(i => byId[i.id] = i);
+  const label = (it, val) => {
+    if(val === DATA.na_key) return {t:'아직까지 없었습니다', na:true};
+    if(!it) return {t:esc(val)};
+    if(it.method === 'SEL'){
+      const n = parseInt(val, 10);
+      return {t: (it.options && it.options[n-1]) ? `${n}. ${it.options[n-1]}` : String(val)};
+    }
+    const o = (it.options||[]).find(x => x.key === val);
+    return {t: o ? `${val}. ${o.text}` : String(val)};
+  };
+  main.innerHTML = `<div class="card"><h3 class="h-m">문항별 응답 ${(v.answers||[]).length}건</h3>
+    <p class="muted" style="margin-bottom:12px">고른 값 그대로입니다. 배점은 표시하지 않습니다.</p>
+    ${(v.answers||[]).map(a => {
+      const it = byId[a.item], L = label(it, a.answer);
+      return `<div class="ansrow">
+        <div class="id">${esc(a.item)}</div>
+        <div>${esc(it ? it.text : '(문항 정보 없음)')}</div>
+        <div class="pick ${L.na?'na':''}">${esc(L.t)}</div>
+        <div class="num muted">${a.dwell||0}초</div></div>`;
+    }).join('') || '<p class="muted">응답이 없습니다.</p>'}</div>`;
+  side.innerHTML = `<div class="card"><h3 class="h-m">응답 조건</h3>
+    ${Object.keys(v.cond||{}).length
+      ? Object.keys(v.cond).map(k => `<div class="kv"><b>${esc(k)}</b><span>${esc(v.cond[k])}</span></div>`).join('')
+      : '<p class="muted">기록 없음</p>'}
+    <h3 class="h-m" style="margin-top:18px">응답 패턴 신호</h3>
+    ${(r.signal_labels||[]).length
+      ? (r.signal_labels||[]).map(s => `<p class="muted" style="margin:6px 0">${md(s)}</p>`).join('')
+      : '<p class="muted">특이 신호 없음</p>'}</div>`;
+}
+
+function adminLoad(){
+  api('adminList', {token: A.token}).then(r => {
+    if(!r || !r.ok){ A.token=''; asave(); ago('adminLogin'); return; }
+    A.list = r; render();
+  }).catch(() => { const c = $('#app');
+    if(c) c.innerHTML = '<section class="scr"><div class="wrap"><p class="err">'
+      + '서버에 닿지 못했습니다.</p></div></section>'; });
+}
+
+function adminOpenRun(cid, run){
+  api('adminRun', {token: A.token, cid, run}).then(r => {
+    if(!r || !r.ok){ alert('결과를 불러오지 못했습니다. ' + ((r&&r.error)||'')); return; }
+    A.view = r; A.tab = 'task'; ago('result');
+  }).catch(() => alert('서버에 닿지 못했습니다.'));
+}
+
+function stepbar(n){
+  const names = ['안내','동의','응답자','진단','결과'];
+  return `<div class="steps">${names.map((t,i)=>
+    `<b class="${i+1===n?'on':''}">${i+1} ${t}</b>${i<4?'<span>·</span>':''}`).join('')}</div>`;
+}
+const allConsent = () => CONSENT.every(c => S.consent[c.k]);
+
+/* ── 렌더·이벤트 ── */
+function render(){
+  if(ADMIN){
+    app.innerHTML = (SCREENS[A.screen] || SCREENS.adminLogin)();
+    bind();
+    if(A.screen === 'admin' && !A.list) adminLoad();
+    if(A.screen === 'result') tab(A.tab || 'task');
+    return;
+  }
+  app.innerHTML = (SCREENS[S.screen] || SCREENS.landing)();
+  bind();
+  if(S.screen === 'result') tab('task');
+  if(S.screen === 'scoring') submit();
+}
+
+function bind(){
+  const on = (sel, fn, ev) => { const e = $(sel); if(e) e.addEventListener(ev||'click', fn); };
+
+  /* 관리자 */
+  on('#doAdmin', doAdminLogin);
+  on('#admReload', () => { A.list = null; render(); });
+  on('#admOut', () => { A.token=''; A.list=null; A.view=null; asave(); ago('adminLogin'); });
+  on('#toDash', () => { A.view = null; ago('admin'); });
+  const fAdm = $('#fAdm');
+  if(fAdm) fAdm.addEventListener('keydown', e => { if(e.key === 'Enter') doAdminLogin(); });
+  document.querySelectorAll('.tbl tr.clk').forEach(el =>
+    el.addEventListener('click', () => {
+      A.open = (A.open === el.dataset.cid) ? '' : el.dataset.cid; render(); }));
+  document.querySelectorAll('.openRun').forEach(el =>
+    el.addEventListener('click', e => { e.stopPropagation();
+      adminOpenRun(el.dataset.cid, Number(el.dataset.run)); }));
+
+  on('#doReset', askReset);
+  on('#goLogin', () => go('login'));
+  on('#goResume', () => go(S.cid ? (answered() ? 'survey' : 'intro') : 'login'));
+  on('#backLanding', () => go('landing'));
+  on('#backLogin', () => go('login'));
+  on('#backIntro', () => go('intro'));
+  on('#backConsent', () => go('consent'));
+  on('#doLogin', doLogin);
+  on('#toConsent', () => go('consent'));
+  on('#toWho', () => { if(allConsent()) go('who'); });
+  on('#toSurvey', toSurvey);
+  on('#prevPage', () => { S.page = Math.max(0, S.page-1); save(); render(); });
+  on('#nextPage', nextPage);
+  on('#dlPdf', downloadPdf);
+
+  document.querySelectorAll('.chk input.c1').forEach(el =>
+    el.addEventListener('change', () => { S.consent[el.id] = el.checked ? 1 : 0; save(); render(); }));
+  const all = $('#cAll');
+  if(all) all.addEventListener('change', () => {
+    CONSENT.forEach(c => S.consent[c.k] = all.checked ? 1 : 0); save(); render(); });
+
+  document.querySelectorAll('.cond input[type=radio]').forEach(el =>
+    el.addEventListener('change', () => { S.cond[el.name] = el.value; save(); render(); }));
+
+  document.querySelectorAll('.q input[type=radio]').forEach(el =>
+    el.addEventListener('change', () => {
+      const q = el.closest('.q').dataset.q;
+      S.ans[q] = el.value;
+      S.dwell[q] = (S.dwell[q]||0) + Math.round((Date.now() - (S.started||Date.now()))/1000);
+      S.started = Date.now();
+      save();
+      el.closest('.q').querySelectorAll('.opt').forEach(o => o.classList.remove('on'));
+      el.closest('.opt').classList.add('on');
+      const msg = $('#sMsg'); if(msg) msg.textContent = '';
+    }));
+
+  document.querySelectorAll('.tab[data-tab]').forEach(el =>
+    el.addEventListener('click', () => tab(el.dataset.tab)));
+}
+
+function doAdminLogin(){
+  const code = ($('#fAdm').value||'').trim(), err = $('#admErr');
+  if(!code){ err.textContent = '코드를 입력해 주십시오.'; err.classList.remove('hide'); return; }
+  err.classList.add('hide');
+  api('adminLogin', {code}).then(r => {
+    if(!r || !r.ok){ err.textContent = '코드가 맞지 않습니다.'; err.classList.remove('hide'); return; }
+    A.token = r.token; A.list = null; asave(); ago('admin');
+  }).catch(() => { err.textContent = '서버에 닿지 못했습니다.'; err.classList.remove('hide'); });
+}
+
+function doLogin(){
+  const cid = ($('#fCid').value||'').trim(), code = ($('#fCode').value||'').trim();
+  const err = $('#loginErr');
+  if(!cid || !code){ err.textContent = '접수번호와 코드를 모두 입력해 주십시오.';
+    err.classList.remove('hide'); return; }
+  S.cid = cid; S.code = code; S.started = Date.now(); save();
+  if(LOCAL){ go('intro'); return; }
+  err.classList.add('hide');
+  api('login', {cid, code}).then(r => {
+    if(!r || !r.ok){ err.textContent = r && r.error === 'revoked'
+        ? '사용할 수 없는 코드입니다. 운영기관으로 문의해 주십시오.'
+        : '접수번호 또는 코드가 맞지 않습니다.';
+      err.classList.remove('hide'); return; }
+    S.token = r.token; S.company = r.company || ''; save(); go('intro');
+  }).catch(() => { err.textContent = '접속에 실패했습니다. 잠시 후 다시 시도해 주십시오.';
+    err.classList.remove('hide'); });
+}
+
+function toSurvey(){
+  S.who.name = ($('#wName').value||'').trim();
+  S.who.title = ($('#wTitle').value||'').trim();
+  save();
+  const missing = [];
+  if(!S.who.name) missing.push('이름');
+  if(!S.who.title) missing.push('직위');
+  DATA.conditions.forEach(c => { if(!S.cond[c.id]) missing.push(c.title); });
+  const msg = $('#wMsg');
+  if(missing.length){ msg.textContent = missing.join(' · ') + ' 항목을 채워 주십시오.'; return; }
+  S.page = 0; S.started = Date.now(); save(); go('survey');
+}
+
+function nextPage(){
+  const miss = pageItems(S.page).filter(i => S.ans[i.id] === undefined || S.ans[i.id] === '');
+  if(miss.length){
+    const msg = $('#sMsg');
+    msg.innerHTML = `<a href="#" id="jump">${miss.length}문항이 남았습니다 — 첫 문항으로</a>`;
+    const j = $('#jump');
+    if(j) j.addEventListener('click', e => { e.preventDefault();
+      const el = document.querySelector(`[data-q="${miss[0].id}"]`);
+      if(el){ el.scrollIntoView({behavior:'smooth', block:'center'});
+        el.style.outline = '2px solid var(--brand)'; el.style.outlineOffset = '8px';
+        setTimeout(()=>{ el.style.outline=''; }, 1600); } });
+    return;
+  }
+  if(S.page < PAGES-1){ S.page++; save(); render(); window.scrollTo(0,0); return; }
+  go('scoring');
+}
+
+/* ── 제출·채점 ── */
+function logline(t){ const b = $('#scoreLog'); if(b) b.insertAdjacentHTML('beforeend',
+  `<div class="kv"><b>·</b><span>${esc(t)}</span></div>`); }
+
+function submit(){
+  logline(`응답 ${answered()}건 전송 완료`);
+  if(LOCAL){
+    logline('로컬 검수 모드 — 예시 결과를 표시합니다');
+    setTimeout(() => { S.result = SAMPLE; save(); go('result'); }, 700);
+    return;
+  }
+  logline('역량별 원점수 산출');
+  api('submit', {
+    cid: S.cid, token: S.token, who: S.who, cond: S.cond,
+    answers: S.ans, dwell: S.dwell,
+    elapsed: Math.round((Date.now() - (S.started||Date.now()))/1000)
+  }).then(r => {
+    if(!r || !r.ok){ const e = $('#scoreErr');
+      e.textContent = '채점에 실패했습니다. ' + ((r && r.error) || '');
+      e.classList.remove('hide'); return; }
+    logline('처방 번들 조회 중');
+    S.result = r.result; save(); go('result');
+  }).catch(() => { const e = $('#scoreErr');
+    e.textContent = '서버에 닿지 못했습니다. 응답은 저장되어 있으니 잠시 후 다시 시도해 주십시오.';
+    e.classList.remove('hide'); });
+}
+
+function api(action, payload){
+  const url = DATA.meta.gas_url;
+  if(!url || url.indexOf('__GAS_URL__') >= 0)
+    return Promise.reject(new Error('GAS 주소 미주입'));
+  return fetch(url, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(Object.assign({action}, payload))}).then(r => r.json());
+}
+
+/* ── 결과 탭 ── */
+function tab(name){
+  document.querySelectorAll('.tab[data-tab]').forEach(t =>
+    t.classList.toggle('on', t.dataset.tab === name));
+  const r = RES(), main = $('#paneMain'), side = $('#paneSide');
+  if(ADMIN){ A.tab = name; asave(); }
+  if(!r || !main) return;
+  if(name === 'answers') return paneAnswers(main, side, r);
+  if(name === 'task') return paneTask(main, side, r);
+  if(name === 'notes') return paneNotes(main, side, r);
+  if(name === 'metric') return paneMetric(main, side, r);
+  return paneNext(main, side, r);
+}
+
+function paneTask(main, side, r){
+  const list = r.prescriptions || [];
+  if(!list.length){ main.innerHTML = `<div class="card"><h3 class="h-m">지금 구간에서 먼저 손댈 자리가 없습니다</h3>
+    <p class="lead">보완 구간에 든 영역이 없습니다. 지금 수준을 유지하시면서 재진단으로 변화를 확인해 보시기 바랍니다.</p></div>`;
+    side.innerHTML = ''; return; }
+  main.innerHTML = list.map(p => `
+    <div class="card">
+      <div style="display:flex;gap:8px;align-items:center">
+        <h3 class="h-m" style="margin:0">${esc(p.competency_name || p.competency)}</h3>
+        <span class="pill p-w">${esc(p.band)}</span></div>
+      <p class="lead" style="margin-top:8px">${md(p.why || '')}</p>
+      ${(p.items||[]).map(i => `<div style="margin-top:16px;border-top:1px solid var(--line);padding-top:14px">
+        <div class="muted">문항 처방</div>
+        <div style="font-size:15px;color:var(--ink);font-weight:600;margin:4px 0 8px">${esc(i.headline)}</div>
+        ${(i.checks||[]).map(c => `<label class="chkitem"><input type="checkbox"><span>${md(c)}</span></label>`).join('')}
+        ${i.note ? `<div class="notice" style="margin-top:10px">${md(i.note)}</div>` : ''}
+        ${i.citation ? `<div class="cite">참고 — ${esc(i.citation.title||'')} ${i.citation.source?`(${esc(i.citation.source)})`:''}
+          ${i.citation.note?` : ${esc(i.citation.note)}`:''}<br>근거 수준 — ${esc(i.citation.evidence_level||'')}</div>` : ''}
+      </div>`).join('')}
+    </div>`).join('');
+  const tools = list.flatMap(p => (p.items||[]).flatMap(i => i.tools||[]));
+  const mets = list.flatMap(p => (p.items||[]).flatMap(i => i.metrics||[]));
+  const seen = new Set();
+  side.innerHTML = `
+    <div class="card"><h3 class="h-m">실행 도구</h3>
+      ${tools.filter(t => !seen.has(t.title) && seen.add(t.title)).map(t =>
+        `<div class="tool"><b>${esc(t.ref||'')} 「${esc(t.title)}」</b>
+          <span class="muted">${esc(t.time||'')} · 창업 교재</span></div>`).join('') || '<p class="muted">해당 없음</p>'}
+      ${list.some(p=>(p.items||[]).some(i=>i.tools_gap))
+        ? `<div class="notice" style="margin-top:10px">${md(
+            list.flatMap(p=>(p.items||[]).map(i=>i.tools_gap)).filter(Boolean)[0])}</div>` : ''}
+    </div>
+    <div class="card"><h3 class="h-m">경영지표</h3>
+      ${dedupe(mets).map(m => `<div class="metric"><span>${esc(m.label||m.name)}</span>
+        <span class="v">${m.value != null ? esc(m.value) : (m.derived ? '자동' : '미입력')}</span></div>`).join('')
+        || '<p class="muted">해당 없음</p>'}
+      <p class="muted" style="margin-top:10px">여기서는 확인만 합니다. 입력·수정은 경영지표 탭에서 하시며,
+        값은 점수에 반영되지 않습니다.</p></div>`;
+}
+function dedupe(ms){ const s = new Set(); return ms.filter(m => {
+  const k = m.key || m.label || m.name; if(s.has(k)) return false; s.add(k); return true; }); }
+
+function paneNotes(main, side, r){
+  const sg = r.signals || {}, cn = r.consensus || {};
+  main.innerHTML = `
+    <div class="card"><h3 class="h-m">읽으실 때 감안할 점</h3>
+      ${(r.signal_labels||[]).map(t => `<div class="notice" style="margin:8px 0">${esc(t)}</div>`).join('')
+        || '<p class="lead">응답 패턴에서 특별히 짚을 점은 없습니다.</p>'}
+      <div style="margin-top:14px">
+        <div class="metric"><span>동일 응답 연속</span><span class="v">${sg.straightline?'있음':'해당 없음'}</span></div>
+        <div class="metric"><span>문항당 3초 미만</span><span class="v">${sg.fast_items||0}건</span></div>
+        <div class="metric"><span>일관성 쌍 불일치</span><span class="v">${sg.consistency_conflict||0}건</span></div>
+      </div></div>
+    <div class="card"><h3 class="h-m">문항의 성격</h3>
+      <p class="lead">경영에는 견해가 모이는 영역과 갈리는 영역이 함께 있습니다.
+        응답하실 때는 표시하지 않았고, 결과에서만 말씀드립니다.</p>
+      <div style="margin-top:12px">
+        ${band('의견이 모이는 구간', cn.universal, '판단이 아니라 실행의 문제입니다. 도입을 미루지 않으실 자리입니다.')}
+        ${band('상황에 따라 달라지는 구간', cn.contingent, '우리 업종·단계에 맞는 쪽을 고르시면 됩니다. 어느 결론이 옳은지 판정하지 않고 판단 절차만 보았습니다.')}
+        ${band('전문가에 따라 의견이 갈리는 구간', cn.contested, '상반된 조언을 받으셔도 정상입니다. 무엇을 더 중요하게 보느냐의 문제라 자료를 더 모아도 합쳐지지 않습니다. 대표가 정하셔야 합니다.')}
+        ${band('여러 길이 있는 구간', cn.equifinal, '무엇을 고르시든 일관되게 미시는 편이 낫습니다.')}
+      </div></div>`;
+  side.innerHTML = r.profile ? `<div class="card"><h3 class="h-m">기록된 성향</h3>
+      <p class="lead">${md(r.profile.display||'')}</p>
+      ${r.profile.note ? `<div class="notice" style="margin-top:10px">${md(r.profile.note)}</div>` : ''}</div>` : '';
+}
+function band(t, n, d){
+  return `<div style="border-top:1px solid var(--line);padding:12px 0">
+    <div style="display:flex;gap:8px;align-items:center">
+      <b style="color:var(--ink);font-size:14px">${esc(t)}</b>
+      <span class="muted">${n||0}문항</span></div>
+    <div style="font-size:13.5px;margin-top:4px">${esc(d)}</div></div>`;
+}
+
+function paneMetric(main, side, r){
+  main.innerHTML = `<div class="card"><h3 class="h-m">경영지표 입력·수정</h3>
+    <p class="lead">값은 점수에 반영되지 않습니다. 넣지 않으셔도 결과는 그대로입니다.
+      넣으시면 파생값이 자동으로 계산되고, 다음 진단에서 변화를 보실 수 있습니다.</p>
+    <div id="metricForm" style="margin-top:14px">
+      ${(r.metric_form || []).map(m => `<label class="f">${esc(m.label)}${m.unit?` <span class="muted">(${esc(m.unit)})</span>`:''}</label>
+        <input type="text" data-mk="${esc(m.key)}" value="${esc(m.value||'')}" ${m.derived?'disabled':''}
+          placeholder="${m.derived?'자동 산출':''}">`).join('') || '<p class="muted">표시할 지표가 없습니다.</p>'}
+    </div>
+    <div class="row"><button class="btn" id="saveMetric">저장</button>
+      <span class="muted" id="mMsg"></span></div></div>`;
+  side.innerHTML = `<div class="card"><h3 class="h-m">자동 산출</h3>
+    <p class="muted">건당이익 = 단가 − 단위원가<br>GPM = 건당이익 ÷ 단가<br>
+      LTV = 건당이익 × (1 ÷ (1 − 재구매율))<br>런웨이 = 보유 현금 ÷ 번레이트</p></div>`;
+  const b = $('#saveMetric');
+  if(b) b.addEventListener('click', () => { $('#mMsg').textContent =
+    LOCAL ? '로컬 검수 모드에서는 저장하지 않습니다.' : '저장했습니다.'; });
+}
+
+function paneNext(main, side, r){
+  main.innerHTML = `<div class="card"><h3 class="h-m">70문항 정밀진단</h3>
+    <p class="lead">${DATA.meta.count}문항은 위치를 알려주고, 70문항은 그 위치가 나온 까닭을 짚습니다.
+      주관식과 AI 인터뷰가 더해져 선택지가 아니라 자기 말로 답하시게 됩니다.</p>
+    <ul class="tight">
+      <li>영역당 문항 수가 늘어 영역 안의 세부 차이가 드러납니다</li>
+      <li>서술형 응답이 남으므로 멘토·IR 컨설턴트가 기업의 언어 그대로 상태를 파악합니다</li>
+      <li>소요 45분 · 두 번에 나누어 응답하실 수 있습니다</li>
+    </ul>
+    <div class="notice" style="margin-top:12px">이 진단에는 <b>전문가에 따라 의견이 갈리는 문항</b>이 포함됩니다.
+      표시가 붙은 항목에서 서로 다른 조언을 들으시더라도 어느 한쪽이 틀린 것이 아니며, 원래 견해가 갈리는 영역입니다.</div>
+    <div class="row"><button class="btn ghost" disabled>준비 중</button>
+      <span class="muted">70문항 정밀진단은 준비 중입니다.</span></div></div>
+    <div class="card"><h3 class="h-m">재진단</h3>
+      <p class="lead">6~12개월 뒤 같은 코드로 다시 응답하시면 회차별 변화를 함께 보실 수 있습니다.</p></div>`;
+  side.innerHTML = '';
+}
+
+/* ── PDF 내려받기 ──
+   🔴 html2pdf 금지(플레이북 패턴). html2canvas + jsPDF를 직접 제어한다.
+   지금은 결과 화면을 섹션 단위로 캡처해 A4로 조립한다.
+   FIA_결과보고서_서식_v1.md §1의 7쪽 정식 보고서는 별도 회차 과제다. */
+const CDN = {
+  h2c:'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+  jspdf:'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js'
+};
+function loadOnce(src){
+  return new Promise((ok, no) => {
+    if(document.querySelector(`script[data-src="${src}"]`)) return ok();
+    const s = document.createElement('script');
+    s.src = src; s.dataset.src = src; s.onload = () => ok(); s.onerror = () => no(new Error(src));
+    document.head.appendChild(s);
+  });
+}
+async function downloadPdf(){
+  const btn = $('#dlPdf'); const old = btn ? btn.textContent : '';
+  try{
+    if(btn) btn.textContent = '준비 중…';
+    await loadOnce(CDN.h2c); await loadOnce(CDN.jspdf);
+    const secs = [document.querySelector('.res-head'), $('#paneMain'), $('#paneSide')]
+      .filter(el => el && el.offsetHeight > 0);
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({unit:'mm', format:'a4', orientation:'p'});
+    const W = 210, H = 297, M = 10, availW = W - M*2, availH = H - M*2;
+    let first = true;
+    for(const el of secs){
+      const cv = await html2canvas(el, {scale:2, backgroundColor:'#ffffff',
+        width: el.scrollWidth, windowWidth: el.scrollWidth});
+      const imgH = availW * cv.height / cv.width;
+      let y = 0;
+      while(y < imgH - 0.5){
+        if(!first) pdf.addPage();
+        first = false;
+        const sliceH = Math.min(availH, imgH - y);
+        const part = document.createElement('canvas');
+        part.width = cv.width;
+        part.height = Math.round(cv.height * (sliceH / imgH));
+        part.getContext('2d').drawImage(cv, 0, Math.round(cv.height * (y / imgH)),
+          cv.width, part.height, 0, 0, cv.width, part.height);
+        pdf.addImage(part.toDataURL('image/png'), 'PNG', M, M, availW, sliceH);
+        y += sliceH;
+      }
+    }
+    const m = (RES() && RES().meta) || {};
+    pdf.save(`FIA_${m.cid||'result'}_R${m.run||1}.pdf`);
+  }catch(e){
+    alert('PDF를 만들지 못했습니다. 인터넷 연결을 확인해 주십시오.');
+  }finally{ if(btn) btn.textContent = old || 'PDF 내려받기'; }
+}
+
+/* ── 로컬 검수용 예시 결과 (채점하지 않음) ── */
+const SAMPLE = {
+  meta:{company:'(주)□□□□', cid:'ITC2026-014', run:1,
+    respondent:{name:'□□□', title:'대표'}, answered_at:'2026-07-31'},
+  scores:{total:63, bands:{'보완':3,'보통':4,'강점':2}, competencies:[
+    {code:'CU',name:'고객 이해',score:31,band:'보완'},
+    {code:'MI',name:'시장 이해',score:38,band:'보완'},
+    {code:'IR',name:'투자 준비도',score:44,band:'보완'},
+    {code:'PC',name:'제품 역량',score:58,band:'보통'},
+    {code:'TB',name:'팀 빌딩',score:61,band:'보통'},
+    {code:'TC',name:'기술사업화',score:63,band:'보통'},
+    {code:'ST',name:'전략적 사고',score:66,band:'보통'},
+    {code:'EC',name:'실행력',score:74,band:'강점'},
+    {code:'FM',name:'창업자 마인드셋',score:78,band:'강점'},
+    {code:'RI',name:'지역혁신 연계',score:null,band:'미산입'}]},
+  prescriptions:[{competency:'CU', competency_name:'고객 이해', band:'보완',
+    why:'제품에 대한 판단이 팀 안의 추정에 기대고 있을 수 있습니다. 직접 듣지 않고 만든 판단은 맞았는지 틀렸는지 확인할 방법이 없습니다. 방향은 **새로 조사하는 일이 아니라 이미 하고 있는 접촉을 기록으로 남기는 일**부터입니다.',
+    items:[{id:'SEL-CU-01', headline:'고객과 직접 이야기한 자리가 최근 3개월간 많지 않습니다',
+      checks:['**고객 명단** — 최근 3개월간 30분 이상 대화한 고객의 이름을 지금 댈 수 있음',
+              '**반영 흔적** — 그 대화에서 나온 말이 제품·가격 결정에 반영된 자리가 있음',
+              '**기록 공유** — 대화 기록이 남아 있어 팀원이 다시 볼 수 있음'],
+      tools:[{ref:'워크시트 3-3',title:'인터뷰 설계',time:'팀 30분'},
+             {ref:'워크시트 3-2',title:'가설 작성',time:'개인 15분 → 팀 공유'}],
+      metrics:[{key:'cu_contact',label:'분기 고객 인터뷰 건수(30분 이상)'},
+               {key:'cu_reflect',label:'인터뷰 후 가설·기능을 수정한 건수'}],
+      citation:{source:'BK-035', title:'『린 고객 개발』', note:'만들기 전 15~20명 인터뷰',
+        evidence_level:'저자 실무 경험 기반 · 실증연구 아님 · 발췌 기준'}}]}],
+  signals:{straightline:false, fast_items:2, consistency_conflict:1},
+  signal_labels:['서로 반대 방향의 문항에 같은 방향으로 답한 자리가 있습니다. 그 영역 점수는 액면대로 읽지 마십시오.'],
+  consensus:{universal:26, contingent:3, contested:1, equifinal:1},
+  profile:{display:'응답을 보면 **매출주도 성장을 통한 접근이 더 적합한 것으로 판단됩니다.** 무엇을 고르시든 일관되게 미시는 편이 낫습니다.',
+    note:'⚠️ 30문항은 방향을 확인하고 검토하는 단계입니다. 경로 적합성의 정확한 진단은 70문항 정밀진단에서 이루어집니다.'},
+  metric_form:[{key:'cu_contact',label:'분기 고객 인터뷰 건수',unit:'건'},
+    {key:'unit_price',label:'단가',unit:'원'},{key:'unit_cost',label:'단위원가',unit:'원'},
+    {key:'repeat_rate',label:'재구매율',unit:'%'},
+    {key:'gross_per_deal',label:'건당이익',unit:'원',derived:true},
+    {key:'runway',label:'잔여 런웨이',unit:'개월',derived:true}]
+};
+
+if(LOCAL && !S.result) S.result = null;
+if(ADMIN){
+  if(!A.token) A.screen = 'adminLogin';
+  else if(A.screen === 'adminLogin') A.screen = 'admin';
+  if(A.screen === 'result' && !A.view) A.screen = 'admin';   // 새로고침하면 상세는 사라진다
+}
+render();
+</script>
+</body>
+</html>
