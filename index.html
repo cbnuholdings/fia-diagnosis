@@ -161,6 +161,25 @@ footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:va
 .runrow .n{font-weight:700;color:var(--ink);min-width:52px}
 .runrow .t{font-variant-numeric:tabular-nums;color:var(--brand);font-weight:700;font-size:17px}
 
+/* 대기 표시 — GAS 응답은 수 초 걸린다. 표시가 없으면 멈춘 것으로 보인다. */
+#busy{position:fixed;left:0;right:0;top:0;z-index:60;display:none}
+#busy.on{display:block}
+#busy .track{height:3px;background:var(--brand-l);overflow:hidden}
+#busy .track i{display:block;height:100%;width:40%;background:var(--brand);
+  animation:slide 1.1s ease-in-out infinite}
+@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
+#busy .msg{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+  background:#fff;border:1px solid var(--line);border-radius:7px;
+  padding:16px 22px;font-size:14px;color:var(--ink);
+  box-shadow:0 6px 24px rgba(16,24,40,.10);display:flex;gap:11px;align-items:center}
+#busy .dot{width:9px;height:9px;border-radius:99px;background:var(--brand);
+  animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  #busy .track i,#busy .dot{animation:none}
+  #busy .track i{width:100%}
+}
+
 /* 관리자 대시보드 */
 .adm{background:#0F1B2A;color:#C9D3E0}
 .adm .in{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;gap:12px;
@@ -207,6 +226,9 @@ footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:va
   <div id="ctx"></div>
 </div>
 
+<div id="busy"><div class="track"><i></i></div>
+  <div class="msg"><span class="dot"></span><span id="busyMsg">접속 중입니다…</span></div></div>
+
 <main id="app"></main>
 
 <footer><div class="in">
@@ -244,6 +266,18 @@ function go(s){ S.screen = s; save(); render(); window.scrollTo(0,0); }
 const V = {list:null, open:'', view:null, myRuns:null};
 
 const LOGIN_MAX = 5;               // 서버 LOCK_MAX 와 같은 값. 안내 문구에만 쓴다.
+
+/* 대기 표시 — 서버를 부르는 모든 자리에 건다.
+   🔴 GAS 는 응답에 수 초가 걸린다. 표시가 없으면 눌러도 아무 일이 없는 것처럼 보여
+      「접속이 안 된다」고 읽힌다. 실제로 그렇게 보고되었다(2026-08-01). */
+let busyN = 0;
+function busy(on, msg){
+  busyN = Math.max(0, busyN + (on ? 1 : -1));
+  const b = document.querySelector('#busy'), m = document.querySelector('#busyMsg');
+  if(!b) return;
+  if(msg && m) m.textContent = msg;
+  b.classList.toggle('on', busyN > 0);
+}
 const isAdmin = () => S.role === 'admin';
 const RES = () => (V.view && V.view.result) || S.result;
 
@@ -679,32 +713,38 @@ function paneAnswers(main, side, r){
 }
 
 function adminLoad(){
+  busy(true, '기업 목록을 불러오는 중입니다…');
   api('adminList', {token: S.token}).then(r => {
+    busy(false);
     if(!r || !r.ok) return logout(true);
     V.list = r; render();
-  }).catch(() => { const c = $('#app');
+  }).catch(() => { busy(false); const c = $('#app');
     if(c) c.innerHTML = '<section class="scr"><div class="wrap"><p class="err">'
-      + '서버에 닿지 못했습니다.</p></div></section>'; });
+      + '서버에 닿지 못했습니다. 잠시 후 새로고침해 주십시오.</p></div></section>'; });
 }
 
 function myLoad(){
+  busy(true, '진단 이력을 불러오는 중입니다…');
   api('myRuns', {token: S.token}).then(r => {
+    busy(false);
     if(!r || !r.ok) return logout(true);
     V.myRuns = r;
     if(r.company) { S.company = r.company; save(); }
     render();
-  }).catch(() => { V.myRuns = {runs:[]}; render(); });
+  }).catch(() => { busy(false); V.myRuns = {runs:[]}; render(); });
 }
 
 /* 회차 상세 — 관리자는 아무 기업이나, 기업은 자기 것만.
    🔴 소유자 검사는 서버가 한다(myRun_ 은 토큰의 cid 로만 연다). 여기 분기는 편의일 뿐이다. */
 function openRun(cid, run){
   const adm = isAdmin();
+  busy(true, `${run}회차 결과를 여는 중입니다…`);
   api(adm ? 'adminRun' : 'myRun', adm ? {token:S.token, cid, run} : {token:S.token, run})
     .then(r => {
+      busy(false);
       if(!r || !r.ok){ alert('결과를 불러오지 못했습니다. ' + ((r&&r.error)||'')); return; }
       V.view = r; S.tab = 'task'; go('result');
-    }).catch(() => alert('서버에 닿지 못했습니다.'));
+    }).catch(() => { busy(false); alert('서버에 닿지 못했습니다.'); });
 }
 
 function stepbar(n){
@@ -782,6 +822,14 @@ function bind(){
     S.cond = {}; save(); go('intro');
   });
 
+  /* 🔴 로그인 칸에서 Enter 가 먹지 않았다 — form 이 아니라 버튼이라 그렇다.
+     아이디 칸에서는 코드 칸으로, 코드 칸에서는 접속으로 보낸다. */
+  const onKey = (sel, fn) => { const e = $(sel);
+    if(e) e.addEventListener('keydown', ev => {
+      if(ev.key === 'Enter'){ ev.preventDefault(); fn(); } }); };
+  onKey('#fCid', () => { const c = $('#fCode'); if(c) c.focus(); });
+  onKey('#fCode', doLogin);
+
   on('#goLogin', () => go('login'));
   on('#goResume', () => go(S.token ? 'home' : 'login'));
   on('#backLanding', () => go(S.token ? 'home' : 'landing'));
@@ -823,10 +871,12 @@ function bind(){
 
 function doUnlock(cid){
   if(!confirm(`${cid} 의 로그인 잠금을 해제합니다.\n\n계속하시겠습니까?`)) return;
+  busy(true, '잠금을 해제하는 중입니다…');
   api('unlock', {token: S.token, cid}).then(r => {
+    busy(false);
     if(!r || !r.ok){ alert('해제하지 못했습니다. ' + ((r&&r.error)||'')); return; }
     V.list = null; render();
-  }).catch(() => alert('서버에 닿지 못했습니다.'));
+  }).catch(() => { busy(false); alert('서버에 닿지 못했습니다.'); });
 }
 
 /* 재진단 — 막지 않는다. 30일 이내면 한 번 알린다.
@@ -852,7 +902,13 @@ function doLogin(){
   if(LOCAL){ S.cid = cid; S.role = 'company'; S.token = 'local';
     S.company = '(로컬 검수)'; S.started = Date.now(); save(); return go('home'); }
 
+  const btn = $('#doLogin'), label = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = '접속 중입니다…'; }
+  const done = () => { busy(false); if(btn){ btn.disabled = false; btn.textContent = label; } };
+  busy(true, '접속 중입니다…');
+
   api('login', {cid, code}).then(r => {
+    done();
     if(!r || !r.ok){
       if(r && r.error === 'locked')
         return fail(`${LOGIN_MAX}회 잘못 입력하여 잠겼습니다. `
@@ -872,7 +928,8 @@ function doLogin(){
     V.list = null; V.myRuns = null; V.view = null; V.open = '';
     save();
     go(r.role === 'admin' ? 'admin' : 'home');
-  }).catch(() => fail('접속에 실패했습니다. 잠시 후 다시 시도해 주십시오.'));
+  }).catch(() => { done();
+    fail('서버에 닿지 못했습니다. 잠시 후 다시 시도해 주십시오.'); });
 }
 
 function toSurvey(){
