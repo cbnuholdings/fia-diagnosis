@@ -166,7 +166,11 @@ footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:va
 .err{color:#B42318;font-size:13px;margin-top:8px}
 
 /* 껍데기 — 화면이 바뀌어도 남는다 */
+.logo[role=button]:hover{opacity:.72}
+.logo[role=button]:focus-visible{outline:2px solid var(--brand);outline-offset:4px;border-radius:4px}
 #who{display:flex;align-items:center;gap:9px;font-size:13px}
+#who b{cursor:pointer}
+#who b:hover{color:var(--brand)}
 #who b{color:var(--ink)}
 #ctx{border-top:1px solid var(--line);background:var(--thead)}
 #ctx .in{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;
@@ -255,7 +259,8 @@ footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:va
 
 <div class="top">
   <div class="in">
-    <div class="logo">FIA <span>창업자 역량진단</span></div>
+    <div class="logo" id="goHome" role="button" tabindex="0"
+      title="처음으로">FIA <span>창업자 역량진단</span></div>
     <div class="sp"></div>
     <div id="who"></div>
     <div class="org">충북대학교기술지주(주)</div>
@@ -932,7 +937,7 @@ function renderShell(){
   if(!who || !ctx) return;
 
   who.innerHTML = S.token ? `
-    <b>${esc(S.company || S.cid)}</b>
+    <b id="shName" title="${isAdmin()?'대시보드로':'진단 이력으로'}">${esc(S.company || S.cid)}</b>
     <span class="rolechip ${isAdmin()?'adm':''}">${isAdmin()?'운영기관':'기업'}</span>
     <button class="lnk" id="shOut">로그아웃</button>` : '';
 
@@ -949,6 +954,7 @@ function renderShell(){
 
   const on = (sel, fn) => { const e = $(sel); if(e) e.addEventListener('click', fn); };
   on('#shOut', askLogout);
+  on('#shName', goHome);          // 기업명도 홈으로
   on('#shHome', () => { V.view = null; go('home'); });
   on('#shDash', () => { V.view = null; go('admin'); });
 }
@@ -1746,6 +1752,28 @@ const SAMPLE = {
 };
 
 if(LOCAL && !S.result) S.result = null;
+/* ── 로고 = 홈 버튼 ──
+   기업은 진단 이력으로, 관리자는 대시보드로, 비로그인은 첫 화면으로.
+   🔴 로고는 껍데기 바깥의 **정적 요소**라 render() 마다 걸면 리스너가 쌓인다.
+      부팅 때 한 번만 건다. */
+function goHome(){
+  if(!S.token) return go('landing');
+  if(FLOW.indexOf(S.screen) >= 0 && answered()
+     && !confirm('응답을 멈추고 진단 이력으로 돌아갑니다.\n'
+       + '지금까지 답하신 내용은 이 브라우저에 남아 이어서 하실 수 있습니다.\n\n돌아가시겠습니까?'))
+    return;
+  V.view = null;
+  go(isAdmin() ? 'admin' : 'home');
+}
+(function bindOnce(){
+  const el = $('#goHome');
+  if(!el) return;
+  el.style.cursor = 'pointer';
+  el.addEventListener('click', goHome);
+  el.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); goHome(); } });
+})();
+
 /* ── 첫 진입 정리 ──
    🔴 상세 결과(V.view)는 저장하지 않는다. 새로고침하면 목록으로 돌려보낸다.
       저장하면 처방 문구를 고쳐도 옛 사본이 남는다. */
