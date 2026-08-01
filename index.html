@@ -142,6 +142,25 @@ footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:va
   border-radius:8px;padding:8px 13px;display:inline-block}
 .err{color:#B42318;font-size:13px;margin-top:8px}
 
+/* 껍데기 — 화면이 바뀌어도 남는다 */
+#who{display:flex;align-items:center;gap:9px;font-size:13px}
+#who b{color:var(--ink)}
+#ctx{border-top:1px solid var(--line);background:var(--thead)}
+#ctx .in{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;
+  align-items:center;gap:6px;flex-wrap:wrap}
+#ctx:empty{display:none}
+.rolechip{font-size:11.5px;border-radius:5px;padding:2px 8px;font-weight:600;
+  background:var(--brand-l);color:var(--brand-d)}
+.rolechip.adm{background:#0F1B2A;color:#fff}
+.lnk{background:none;border:0;font:inherit;color:var(--sub);cursor:pointer;
+  padding:4px 8px;border-radius:6px}
+.lnk:hover{background:var(--thead);color:var(--ink)}
+.runrow{display:flex;align-items:center;gap:14px;padding:13px 0;
+  border-top:1px solid var(--line);flex-wrap:wrap}
+.runrow:first-of-type{border-top:0}
+.runrow .n{font-weight:700;color:var(--ink);min-width:52px}
+.runrow .t{font-variant-numeric:tabular-nums;color:var(--brand);font-weight:700;font-size:17px}
+
 /* 관리자 대시보드 */
 .adm{background:#0F1B2A;color:#C9D3E0}
 .adm .in{max-width:1180px;margin:0 auto;padding:9px 24px;display:flex;gap:12px;
@@ -178,11 +197,15 @@ footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:va
 </head>
 <body>
 
-<div class="top"><div class="in">
-  <div class="logo">FIA <span>창업자 역량진단</span></div>
-  <div class="sp"></div>
-  <div class="org">충북대학교기술지주(주)</div>
-</div></div>
+<div class="top">
+  <div class="in">
+    <div class="logo">FIA <span>창업자 역량진단</span></div>
+    <div class="sp"></div>
+    <div id="who"></div>
+    <div class="org">충북대학교기술지주(주)</div>
+  </div>
+  <div id="ctx"></div>
+</div>
 
 <main id="app"></main>
 
@@ -195,7 +218,8 @@ footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:va
 const DATA = {"meta": {"id": "FIA-30", "title": "FIA 창업자 역량 자가진단 (30문항)", "minutes": 20, "count": 30, "watermark": "파일럿·내부 참고용", "gas_url": "https://script.google.com/macros/s/AKfycbza1WoS6xdsEkSRcEWZLcTsRL1sC-CXj5Yx7Q7_uOsyqqyitkfkyagbe8xxbhy6SW6C/exec", "per_page": 5}, "names_ko": {"FM": "창업자 마인드셋", "EC": "실행력", "CU": "고객 이해", "MI": "시장 이해", "PC": "제품 역량", "TC": "기술사업화", "TB": "팀 빌딩", "IR": "투자 준비도", "ST": "전략적 사고", "RI": "지역혁신 연계", "PATH": "성장 경로"}, "items": [{"id": "SEL-FM-01", "comp": "FM", "method": "SEL", "n": 1, "text": "최근 1년간 사업상 심각한 좌절(투자 거절, 핵심 인력 이탈, 계약 파기 등)을 겪은 뒤 1주일 이내에 구체적 대안 행동에 착수한 경험이 얼마나 됩니까?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "최근 1년간 그런 좌절을 겪은 일이 아직까지 없었습니다"}, {"id": "SEL-EC-01", "comp": "EC", "method": "SEL", "n": 2, "text": "고객·멘토·투자자의 부정적 피드백을 받은 뒤 2주 이내에 제품·전략을 실제로 수정한 적이 얼마나 됩니까?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "고객·멘토·투자자로부터 그런 부정적 피드백을 받은 일이 아직까지 없었습니다"}, {"id": "SEL-EC-02", "comp": "EC", "method": "SEL", "n": 3, "text": "새 아이디어를 최소기능형태(프로토타입·랜딩페이지·실험)로 세상에 내놓기까지 통상 얼마나 걸립니까?", "scale": "leadtime5", "options": ["6개월 초과", "3–6개월", "1–3개월", "2주–1개월", "2주 이내"]}, {"id": "SEL-CU-01", "comp": "CU", "method": "SEL", "n": 4, "text": "최근 3개월간 제품 개선 목적으로 잠재·기존 고객과 30분 이상 1:1 심층 인터뷰를 진행한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-CU-02", "comp": "CU", "method": "SEL", "n": 5, "text": "고객이 제품을 실제로 사용하는 현장을 직접 방문·관찰한 적이 얼마나 됩니까?(최근 6개월)", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-MI-01", "comp": "MI", "method": "SEL", "n": 6, "text": "최근 6개월간 경쟁사·대체재의 가격·기능·투자 동향을 조사해 기록으로 남긴 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-PC-01", "comp": "PC", "method": "SEL", "n": 7, "text": "최근 6개월간 기능을 추가하기 전에 가설을 문서로 정의하고 실험으로 확인한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "최근 6개월간 제품에 기능을 추가한 일이 아직까지 없었습니다"}, {"id": "SEL-PC-02", "comp": "PC", "method": "SEL", "n": 8, "text": "최근 6개월간 제품·서비스 버전을 반복 개선(iteration)한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-TC-01", "comp": "TC", "method": "SEL", "n": 9, "text": "핵심 기술에 대해 특허 출원·영업비밀 관리 등 방어 조치를 실제로 취했다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-TC-02", "comp": "TC", "method": "SEL", "n": 10, "text": "기술을 비전문가(투자자·고객)에게 설명하기 위한 별도 자료를 준비해 둔다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-TB-01", "comp": "TB", "method": "SEL", "n": 11, "text": "핵심 인재 영입 시 명확한 역량·컬처핏 기준을 문서화해 활용한다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"], "na": "핵심 인재를 영입한 일이 아직까지 없었습니다"}, {"id": "SEL-IR-01", "comp": "IR", "method": "SEL", "n": 12, "text": "최근 6개월간 번레이트(월 현금 소진액)와 잔여 런웨이를 계산해 기록으로 남긴 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"]}, {"id": "SEL-ST-01", "comp": "ST", "method": "SEL", "n": 13, "text": "최근 3개월간 중요한 의사결정에서 2개 이상의 대안을 문서로 비교한 횟수는?", "scale": "freq5", "options": ["0회", "1–2회", "3–5회", "6–10회", "11회 이상"], "na": "최근 3개월간 그만한 무게의 의사결정이 아직까지 없었습니다"}, {"id": "SJT-FM-01", "comp": "FM", "method": "SJT", "n": 14, "text": "자금난으로 이번 달 팀 급여의 일부만 지급 가능합니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "아무에게도 알리지 않고 대표 급여만 삭감해 메운다"}, {"key": "B", "text": "지급 지연 사실과 사유·일정을 사전에 고지하고, 법이 정한 절차와 동의 요건을 확인한 뒤 현금 보전 대안을 함께 제시한다"}, {"key": "C", "text": "대출로 전액 지급하고 위기 상황은 알리지 않는다"}, {"key": "D", "text": "무급을 통보하고 각자 판단에 맡긴다"}]}, {"id": "SJT-EC-01", "comp": "EC", "method": "SJT", "n": 15, "text": "3개 스프린트 연속으로 계획한 목표의 절반만 완료되고 있습니다. 팀원들은 각자 바쁘다고 말합니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "달성 가능한 수준으로 목표치를 낮춘다"}, {"key": "B", "text": "미완료 항목의 지연 원인을 유형별로 분류해 병목을 특정하고, 다음 스프린트에서 그 원인 하나만 제거하는 실험을 한다"}, {"key": "C", "text": "인력을 충원한다"}, {"key": "D", "text": "개인별 완료율을 공개해 경쟁을 유도한다"}]}, {"id": "SJT-CU-02", "comp": "CU", "method": "SJT", "n": 16, "text": "초기 유료고객 1곳이 큰 금액을 제시하며 자사 전용 커스터마이징을 요구합니다. 제품 로드맵과는 어긋납니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "매출을 위해 요구를 전면 수용한다"}, {"key": "B", "text": "로드맵 정합성과 기회비용을 산정한 뒤 공용화 가능한 범위만 반영하고, 나머지는 유상 별도 계약으로 분리한다"}, {"key": "C", "text": "제품 원칙을 지키기 위해 전면 거절한다"}, {"key": "D", "text": "전담 SI 조직을 신설해 수주한다"}]}, {"id": "SJT-MI-02", "comp": "MI", "method": "SJT", "n": 17, "text": "경쟁사가 우리 제품이 자사 특허를 침해했다고 주장하는 내용증명을 보냈습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "무시하고 사업을 계속한다"}, {"key": "B", "text": "관련 자료를 보전한 뒤 전문가 검토로 침해 여부를 확인하고, 회피설계·라이선스·대응을 사업 연속성 기준으로 결정한다"}, {"key": "C", "text": "즉시 해당 기능을 삭제한다"}, {"key": "D", "text": "맞소송으로 대응한다"}]}, {"id": "SJT-TC-01", "comp": "TC", "method": "SJT", "n": 18, "text": "실험실에서 검증한 성능이 양산 공정에서는 재현되지 않아 수율이 목표의 절반입니다. 고객사 납품 일정은 두 달 남았습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "현재 수율로 납품하고 개선은 이후에 진행한다"}, {"key": "B", "text": "수율 저하의 지배 인자를 공정 변수별로 분리 검증하고, 고객사에 사양·일정 조정안을 근거와 함께 제시한다"}, {"key": "C", "text": "납기를 맞추기 위해 사양을 낮춰 재협상한다"}, {"key": "D", "text": "외부 위탁생산으로 전환한다"}]}, {"id": "SJT-TB-01", "comp": "TB", "method": "SJT", "n": 19, "text": "공동창업자가 개인 사정으로 근로 시간을 절반으로 줄이겠다고 통보했습니다. 지분은 5:5입니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "동등 지분을 그대로 유지한다"}, {"key": "B", "text": "기여도 변화와 지분·베스팅 조정을 당사자와 협의하고, 법률 자문을 거쳐 문서화한다"}, {"key": "C", "text": "즉시 퇴사를 권고한다"}, {"key": "D", "text": "대표자가 업무 가중을 감수하고 넘어간다"}]}, {"id": "SJT-IR-01", "comp": "IR", "method": "SJT", "n": 20, "text": "예상보다 30% 낮은 밸류의 텀시트를 받았습니다. 런웨이는 5개월 남았습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "조건을 받아들일 수 없어 거절하고 더 좋은 조건을 기다린다"}, {"key": "B", "text": "희석 영향·마일스톤·부수 조항 전체를 계산해 협상하되, 대안 자금원을 병행 타진한다"}, {"key": "C", "text": "즉시 무조건 수용한다"}, {"key": "D", "text": "브릿지론으로만 버틴다"}]}, {"id": "SJT-IR-02", "comp": "IR", "method": "SJT", "n": 21, "text": "핵심 투자자가 '공동창업자 중 1인을 교체해야 투자하겠다'는 조건을 제시했습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "투자를 위해 즉시 교체를 통보한다"}, {"key": "B", "text": "지적된 문제의 사실 여부를 먼저 검증하고, 당사자 협의와 이사회 절차를 거쳐 결정한다"}, {"key": "C", "text": "조건을 거절하고 투자를 포기한다"}, {"key": "D", "text": "투자자에게 알리지 않고 해당 창업자를 실무에서 배제한다"}]}, {"id": "SJT-ST-01", "comp": "ST", "method": "SJT", "n": 22, "text": "런웨이가 3개월 남았고, 제품 출시는 연기되었으며 브릿지 투자가 전면 거절되었습니다. 가장 적절한 첫 조치는?", "options": [{"key": "A", "text": "미완성 제품을 즉시 출시한다"}, {"key": "B", "text": "현금 소진 시점을 다시 산정해 이해관계자에게 고지하고, 법이 정한 절차 안에서 비용 구조 조정안을 마련한다"}, {"key": "C", "text": "브릿지론을 타진한다"}, {"key": "D", "text": "외주 용역 수주로 현금을 확보한다"}]}, {"id": "SJT-CU-01", "comp": "CU", "method": "SJT", "n": 23, "text": "핵심 고객군이 설문에서 'A 기능이 꼭 필요하다'고 답했으나, 실제 사용 로그에서는 아무도 A를 쓰지 않습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "설문 응답대로 A 기능을 고도화한다"}, {"key": "B", "text": "사용 로그를 우선 근거로 삼고, 소수 심층 인터뷰로 불일치 원인을 규명한다"}, {"key": "C", "text": "설문 응답자 중 실제 사용자를 식별해 재확인하고, 질문 설계를 고쳐 다시 조사한다"}, {"key": "D", "text": "판단을 유보하고 매출에 직결되는 다른 기능에 집중한다"}]}, {"id": "SJT-CU-03", "comp": "PC", "method": "SJT", "n": 24, "text": "가입자는 늘지만 4주 리텐션이 15%로 낮고, 대신 10%의 열성 사용자가 매일 접속합니다. 가장 적절한 우선순위는?", "options": [{"key": "A", "text": "신규 유입 마케팅을 확대한다"}, {"key": "B", "text": "열성 사용자군을 세분해 공통 사용맥락을 분석하고 핵심가치를 재정의한다"}, {"key": "C", "text": "리텐션이 낮으므로 피벗한다"}, {"key": "D", "text": "이탈 코호트와 잔존 코호트의 차이를 먼저 측정해 판단 근거를 확보한다"}]}, {"id": "SJT-MI-01", "comp": "MI", "method": "SJT", "n": 25, "text": "대기업이 우리와 유사한 기능을 무료로 번들 출시했습니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "즉시 가격을 인하해 맞대응한다"}, {"key": "B", "text": "대기업이 진입하지 않는 좁은 시장·심층 가치로 재포지셔닝한다"}, {"key": "C", "text": "해당 시장을 포기하고 인접한 문제 영역으로 전환한다"}, {"key": "D", "text": "기능을 추가해 경쟁한다"}]}, {"id": "SJT-ST-03", "comp": "ST", "method": "SJT", "n": 26, "text": "경쟁사가 대규모 투자를 유치해 공격적 마케팅으로 시장을 잠식 중입니다. 가장 적절한 대응은?", "options": [{"key": "A", "text": "자금을 추가 조달해 마케팅으로 맞대응한다"}, {"key": "B", "text": "방어 가능한 핵심 세그먼트에 자원을 집중하고 해자를 강화한다"}, {"key": "C", "text": "관망한다"}, {"key": "D", "text": "즉시 매각을 추진한다"}]}, {"id": "PATH-01", "comp": "PATH", "method": "SEL", "n": 27, "text": "앞으로 1~2년, 귀사의 성장을 어느 쪽으로 끌고 가실 계획입니까?", "scale": "path3", "options": ["투자주도 — 외부투자를 받아 인재와 개발에 먼저 투입하고 시장을 선점한다", "매출주도 — 고객과 초기 매출로 검증한 뒤 그 현금으로 확장한다", "기술사업화 — 연구개발과 특허를 먼저 쌓고 기술이전·공동개발로 진입한다"], "keys": ["A", "B", "C"]}, {"id": "SEL-FM-04", "comp": "FM", "method": "SEL", "n": 28, "text": "나는 창업을 결심한 이후 자금·팀 문제로 단 한 번도 심각한 스트레스나 두려움을 느낀 적이 없다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-CU-04", "comp": "CU", "method": "SEL", "n": 29, "text": "우리 제품은 충분히 좋기 때문에 고객 인터뷰를 자주 할 필요가 없다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}, {"id": "SEL-RI-01", "comp": "RI", "method": "SEL", "n": 30, "text": "충북 전략산업(반도체·이차전지·바이오·AI·모빌리티·양자) 클러스터와의 협력 계획·경험이 있다.", "scale": "likert5", "options": ["전혀 아니다", "아니다", "보통", "그렇다", "매우 그렇다"]}], "conditions": [{"id": "COND-TECH-01", "title": "기술 진입장벽 유형", "question": "귀사의 제품·서비스는 고객에게 판매되기까지 어떤 검증을 거칩니까?", "lead": "아래 기준을 먼저 읽고 고르십시오. 어느 쪽이 우월하다는 뜻이 아니라, 경쟁 상황에서 취할 수 있는 대응이 달라지기 때문에 묻는 것입니다.", "groups": [{"key": "defensible_by_technology", "label": "기술 검증형 — 판매 전에 인증·허가나 임상, 또는 수요처의 자체 검증을 거쳐야 합니다", "criteria": ["판매 전에 법으로 정해진 인증·허가를 받아야 한다 (식약처 품목허가·GMP·KC·KS·환경인증 등)", "안전성·유효성을 임상 또는 비임상 시험으로 입증해야 한다", "수요처가 도입 전에 자체 검증(PoC·퀄테스트·실증)을 요구하고, 그 기간이 3개월 이상이다", "실험실에서 낸 성능을 양산에서 재현하려면 별도의 공정 개발이 필요하다", "핵심 기능이 특허나 표준으로 보호되어 우회설계에 상당한 비용과 기간이 든다"], "rule": "위 다섯 가운데 **하나라도 해당하면** 이쪽입니다."}, {"key": "feature_substitutable", "label": "기능 대체형 — 별도 인증이나 고객사 검증 없이 바로 쓸 수 있습니다", "criteria": ["고객이 가입·구매 직후 바로 사용한다", "규제나 인증이 없거나 형식적인 절차에 그친다", "경쟁 제품이 같은 기능을 3~6개월 안에 붙일 수 있다", "고객이 지금 쓰는 대체 수단이 이미 여럿 있다 (엑셀·수기·다른 앱 등)"], "rule": "위 기준에 주로 해당하면 이쪽입니다."}], "exclusions": {"title": "진입장벽으로 세지 않는 것", "note": "**돈이 많이 든다고 기술 진입장벽이 아닙니다. 기술을 검증받는 데 드는 비용만 해당합니다.** 아래는 자본력이나 사업 규모의 문제이지 기술 장벽이 아닙니다.", "items": ["마케팅·광고 비용", "초기 사용자·가입자 확보 비용", "브랜드 인지도", "개발 인건비 자체", "영업 조직 구축 비용"]}, "examples": [{"업종": "바이오·제약", "판정": "defensible_by_technology", "이유": "비임상·임상으로 안전성과 유효성을 입증해야 하며 여기에 수년과 상당한 비용이 든다. 이 비용은 기술 검증에 직접 쓰이므로 진입장벽으로 본다. **판매 이후의 마케팅 비용은 제외한다.**"}, {"업종": "의료기기", "판정": "defensible_by_technology", "이유": "식약처 품목허가와 GMP 인증을 통과해야 판매할 수 있다."}, {"업종": "반도체 소부장", "판정": "defensible_by_technology", "이유": "수요처(소자·장비사)의 퀄테스트가 통상 6~18개월 걸리고, 통과 전에는 납품이 불가하다."}, {"업종": "이차전지 소재", "판정": "defensible_by_technology", "이유": "셀 메이커의 평가 절차를 거쳐야 하며 공정 재현성 확보에 별도 개발이 든다."}, {"업종": "공공 실증형 기술(환경·에너지·안전)", "판정": "defensible_by_technology", "이유": "실증 사업과 성능 인증을 거쳐야 조달·납품이 열린다."}, {"업종": "일반 B2C 앱·커머스", "판정": "feature_substitutable", "이유": "인증 절차가 없고 사용자가 내려받아 바로 쓴다. 대체 수단도 여럿이다."}, {"업종": "일반 업무용 B2B SaaS", "판정": "feature_substitutable", "이유": "도입 검증이 짧고, 같은 기능을 제공하는 대체 서비스가 이미 있다."}, {"업종": "AI 서비스", "판정": "갈린다 — 기준으로 판단할 것", "이유": "의료 AI·금융 AI는 인허가와 감독 규제가 걸려 기술 검증형이고, 일반 생산성 도구는 기능 대체형이다. **업종 이름이 아니라 위 기준으로 고르십시오.**"}], "note": ""}, {"id": "COND-LOG-01", "title": "고객 행동 데이터 축적 여부", "question": "고객이 제품을 쓰는 과정이 데이터로 쌓입니까?", "lead": "고객의 말과 실제 행동이 어긋날 때, 무엇을 먼저 근거로 삼을지가 달라지기 때문에 묻습니다.", "groups": [{"key": "behavioral_log_available", "label": "쌓입니다 — 사용 기록이 자동으로 남아 언제 무엇을 했는지 확인할 수 있습니다", "criteria": ["제품이 소프트웨어·앱·웹이고 사용자 행동이 자동으로 기록된다", "고객이 주 1회 이상 반복해서 사용한다", "이탈·재방문·기능별 사용 여부를 지금 조회할 수 있다"], "rule": ""}, {"key": "low_frequency_b2b", "label": "쌓이지 않습니다 — 구매·사용이 드물거나 오프라인이라 과정을 데이터로 볼 수 없습니다", "criteria": ["고객이 연 1~2회 구매한다 (장비·원료·수주형 납품)", "오프라인 대면으로 제공되어 사용 과정이 기록되지 않는다", "사용자와 구매 결정자가 달라 실제 사용 양상을 알기 어렵다"], "rule": ""}], "exclusions": null, "examples": [{"업종": "B2C 앱·구독형 서비스", "판정": "behavioral_log_available", "이유": "접속·기능 사용이 자동 기록되고 반복 사용된다."}, {"업종": "업무용 SaaS", "판정": "behavioral_log_available", "이유": "계정별 사용 로그가 남는다. 다만 구매 결정자와 사용자가 다르면 해석에 주의가 필요하다."}, {"업종": "산업 장비·소재 납품", "판정": "low_frequency_b2b", "이유": "구매 주기가 길고 사용은 고객사 공정 안에서 일어나 기록이 우리에게 오지 않는다."}, {"업종": "바이오·제약", "판정": "low_frequency_b2b", "이유": "처방·투여 기록은 의료기관에 남고 기업이 직접 조회할 수 없다."}, {"업종": "오프라인 서비스·시공", "판정": "low_frequency_b2b", "이유": "대면 제공이라 사용 과정이 데이터로 남지 않는다."}], "note": ""}, {"id": "COND-STAGE-01", "title": "유료 매출 발생 여부", "question": "지금까지 고객에게 대가를 받고 제품·서비스를 판매한 적이 있습니까?", "lead": "🔴 이 질문을 「PMF 전후」라고 부르지 않습니다. PMF의 판정 기준 자체가 문헌상 미해결이라 그렇게 부르면 조건이 새 논쟁이 되고, 좋게 답하고 싶어지는 문항이 됩니다. 관측 가능한 사실로만 묻습니다.", "groups": [{"key": "pre_revenue", "label": "아직 없습니다 — 무상 제공·시범 운영·정부 과제 수행만 있었습니다", "criteria": ["고객이 대가를 지불한 판매 실적이 없다", "정부 R&D 과제비·수상금은 매출로 세지 않는다", "무상 시범 운영(파일럿)은 매출로 세지 않는다"], "rule": ""}, {"key": "post_revenue", "label": "있습니다 — 대가를 받고 판매한 실적이 있습니다", "criteria": ["금액과 무관하게 고객이 지불한 판매 건이 있다", "용역·수주 매출도 포함한다"], "rule": ""}], "exclusions": null, "examples": [], "note": "판정은 자가보고입니다. 매출 여부를 확인할 수 있는 무료 외부 자료는 없습니다 (국세청은 계속사업자 여부만, 국민연금·근로복지공단은 인원만, DART는 외감법인만 수록)."}], "na_key": "NA"};
 const QS = new URLSearchParams(location.search);
 const LOCAL = QS.has('local');
-const ADMIN = QS.has('admin');
+/* 🔴 ?admin=1 은 폐기됐다. 역할은 서버가 판정한다.
+   옛 즐겨찾기가 죽지 않도록 파라미터가 있어도 무시하고 로그인으로 보낸다. */
 const KEY = 'fia30:' + DATA.meta.id;
 const $ = s => document.querySelector(s);
 const app = $('#app');
@@ -203,41 +227,41 @@ const esc = s => String(s == null ? '' : s)
   .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const md = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b style="color:var(--ink)">$1</b>');
 
-/* ── 상태 ── */
-const BLANK = {screen:'landing', cid:'', code:'', consent:{c1:0,c2:0,c3:0,c4:0},
-  who:{name:'',title:''}, cond:{}, ans:{}, dwell:{}, page:0, started:0, result:null};
+/* ── 상태 ──
+   🔴 기업·관리자 상태를 한 벌로 합쳤다(2026-08-01 P1). 예전엔 S 와 A 로 나뉘어
+      같은 브라우저에서 진단을 받아 본 뒤 대시보드를 열면 결과가 덮어써졌다.
+      지금은 로그인할 때 역할이 바뀌면 응답 상태를 비운다. */
+const BLANK = {screen:'landing', token:'', cid:'', role:'', company:'',
+  consent:{c1:0,c2:0,c3:0,c4:0}, who:{name:'',title:''}, cond:{}, ans:{}, dwell:{},
+  page:0, started:0, result:null, tab:'task'};
 let S = load();
 function load(){ try{ return Object.assign({}, BLANK, JSON.parse(localStorage.getItem(KEY)||'{}')); }
   catch(e){ return Object.assign({}, BLANK); } }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
-function reset(){ localStorage.removeItem(KEY); S = Object.assign({}, BLANK); go('landing'); }
 function go(s){ S.screen = s; save(); render(); window.scrollTo(0,0); }
 
-/* 초기화 — 되돌릴 수 없으니 무엇이 지워지는지 세어서 보여주고 묻는다 */
-function askReset(){
+/* 화면에만 두는 값 — 저장하지 않는다. 목록·상세는 매번 서버에서 받는다. */
+const V = {list:null, open:'', view:null, myRuns:null};
+
+const LOGIN_MAX = 5;               // 서버 LOCK_MAX 와 같은 값. 안내 문구에만 쓴다.
+const isAdmin = () => S.role === 'admin';
+const RES = () => (V.view && V.view.result) || S.result;
+
+/* 로그아웃 = 이 브라우저에서 지우기. 초기화 버튼과 하는 일이 같아 하나로 합쳤다. */
+function logout(force){
   const n = answered();
-  const msg = n
-    ? `응답한 ${n}문항과 접속 정보가 이 브라우저에서 지워집니다.\n`
-      + `제출을 마친 회차는 서버에 남아 있어 지워지지 않습니다.\n\n초기화하시겠습니까?`
-    : '접속 정보를 지우고 처음 화면으로 돌아갑니다.\n\n초기화하시겠습니까?';
-  if(confirm(msg)) reset();
+  if(!force && n && !confirm(
+      `응답한 ${n}문항이 이 브라우저에서 지워집니다.\n`
+      + `제출을 마친 회차는 서버에 남아 있어 언제든 다시 보실 수 있습니다.\n\n나가시겠습니까?`))
+    return;
+  localStorage.removeItem(KEY);
+  S = Object.assign({}, BLANK);
+  V.list = null; V.open = ''; V.view = null; V.myRuns = null;
+  go('landing');
 }
-
-/* ── 관리자 상태 ──
-   기업 응답 상태(S)와 섞지 않는다. 같은 브라우저에서 진단을 받아 본 뒤
-   대시보드를 열면 응답이 덮어써진다.
-   세션 저장소를 쓰므로 탭을 닫으면 로그아웃된다. */
-const AKEY = KEY + ':adm';
-const ABLANK = {screen:'adminLogin', token:'', tab:'task'};
-let A = Object.assign({}, ABLANK);
-try{ A = Object.assign(A, JSON.parse(sessionStorage.getItem(AKEY)||'{}')); }catch(e){}
-A.list = null; A.view = null; A.open = '';
-function asave(){ try{ sessionStorage.setItem(AKEY,
-  JSON.stringify({screen:A.screen, token:A.token, tab:A.tab})); }catch(e){} }
-function ago(s){ A.screen = s; asave(); render(); window.scrollTo(0,0); }
-
-/* 결과 렌더러는 기업·관리자 양쪽이 함께 쓴다 */
-const RES = () => ADMIN ? (A.view && A.view.result) : S.result;
+/* 응답 흐름 밖(홈·대시보드·결과)에서는 묻지 않는다 */
+const FLOW = ['intro','consent','who','survey','scoring'];
+function askLogout(){ logout(FLOW.indexOf(S.screen) < 0); }
 
 /* ── 문항 묶기 ── */
 const ITEMS = DATA.items;
@@ -257,13 +281,10 @@ SCREENS.landing = () => `
      ${DATA.meta.count}개 문항에 답하시면 즉시 결과와 보완 과제가 나옵니다.</p>
   <div class="row">
     <button class="btn" id="goLogin">진단 시작하기</button>
-    <button class="btn ghost" id="goResume">이어서 응답하기</button>
-    ${(S.cid || answered()) ? `<span class="sp"></span>
-      <button class="btn ghost sm" id="doReset">초기화</button>` : ''}
+    ${answered() ? '<button class="btn ghost" id="goResume">이어서 응답하기</button>' : ''}
   </div>
-  ${(S.cid || answered()) ? `<p class="muted">이 브라우저에 ${esc(S.cid||'')}
-     ${answered() ? `· 응답 ${answered()}문항` : ''}이 남아 있습니다.
-     다른 분이 이어서 쓰시려면 초기화해 주십시오.</p>` : ''}
+  ${answered() ? `<p class="muted">이 브라우저에 응답 ${answered()}문항이 남아 있습니다.
+     접속하시면 이어서 하실 수 있습니다.</p>` : ''}
   <div class="card">
     <div class="kv"><b>구성</b><span>${DATA.meta.count}문항 · 전부 선택형 · 9개 영역</span></div>
     <div class="kv"><b>소요</b><span>${esc(DATA.meta.minutes)}분 · 중간에 닫아도 이어서 응답</span></div>
@@ -280,24 +301,68 @@ SCREENS.landing = () => `
 </div></section>`;
 
 SCREENS.login = () => `
-<section class="scr"><div class="wrap" style="max-width:460px">
+<section class="scr"><div class="wrap" style="max-width:440px">
   <div class="eyebrow">접속</div>
-  <h1 class="h-l">접속 코드 입력</h1>
-  <p class="lead">운영기관이 발급한 접수번호와 코드를 입력해 주십시오.</p>
+  <h1 class="h-l">아이디와 접속 코드</h1>
+  <p class="lead">운영기관이 발급한 값을 입력해 주십시오.</p>
   <div class="card">
-    <label class="f" for="fCid">접수번호</label>
-    <input type="text" id="fCid" placeholder="ITC2026-000" value="${esc(S.cid)}" autocomplete="off">
+    <label class="f" for="fCid">아이디</label>
+    <input type="text" id="fCid" placeholder="접수번호 (ITC2026-000)" value="${esc(S.cid)}"
+      autocomplete="username" autocapitalize="off" spellcheck="false">
     <label class="f" for="fCode">접속 코드</label>
-    <input type="text" id="fCode" placeholder="6자리" value="${esc(S.code)}" autocomplete="off">
+    <input type="password" id="fCode" placeholder="발급받으신 코드"
+      autocomplete="current-password">
     <div class="err hide" id="loginErr"></div>
-    <div class="row"><button class="btn" id="doLogin">확인</button>
-      <button class="btn ghost" id="backLanding">뒤로</button>
-      <span class="sp" style="flex:1"></span>
-      <button class="btn ghost sm" id="doReset">초기화</button></div>
+    <div class="row"><button class="btn" id="doLogin">접속하기</button>
+      <button class="btn ghost" id="backLanding">뒤로</button></div>
   </div>
-  <p class="muted">코드를 분실하신 경우 운영기관으로 문의해 주십시오. 재발송 기능은 제공하지 않습니다.<br>
-     접속은 12시간 유지되며, 중간에 닫아도 이어서 응답하실 수 있습니다.</p>
+  <p class="muted">기업은 <b style="color:var(--ink)">접수번호</b>가 아이디입니다.
+     코드를 분실하신 경우 운영기관으로 문의해 주십시오 — 재발송 기능은 없습니다.<br>
+     접속은 12시간 유지됩니다.<br>
+     <b style="color:var(--warn)">${LOGIN_MAX}회 잘못 입력하면 24시간 동안 잠깁니다.</b>
+     잠기신 경우 운영기관으로 문의해 주십시오.</p>
 </div></section>`;
+
+/* ══════════════ 기업 홈 (2026-08-01 신설) ══════════════
+   결과는 서버에 있고 원응답으로 다시 채점해 내려온다. 그래서 기기를 바꿔도,
+   브라우저를 지워도 지난 결과를 다시 볼 수 있다. 이것이 없어서 기업은
+   제출 직후 PDF 를 받지 않으면 자기 결과를 영영 못 봤다. */
+SCREENS.home = () => {
+  const m = V.myRuns;
+  const inProgress = answered();
+  const list = (m && m.runs) || [];
+  const days = m && m.days_since_last;
+  return `
+  <section class="scr"><div class="wrap">
+    <div class="eyebrow">${esc(S.company || S.cid)}</div>
+    <h1 class="h-l" style="margin-top:6px">진단 이력</h1>
+    <div class="card">
+      ${!m ? '<p class="muted">불러오는 중입니다.</p>'
+        : list.length ? list.map(r => `
+        <div class="runrow">
+          <span class="n">${r.run}회차</span>
+          <span class="muted">${esc(r.ts)}</span>
+          <span class="muted">${esc(r.name)} ${esc(r.title)}</span>
+          <span class="sp" style="flex:1"></span>
+          <span class="t">${esc(r.total)}</span>
+          <span class="pill p-w">보완 ${(r.bands||{})['보완']||0}</span>
+          <span class="pill p-m">보통 ${(r.bands||{})['보통']||0}</span>
+          <span class="pill p-g">강점 ${(r.bands||{})['강점']||0}</span>
+          <button class="btn sm ghost openMine" data-run="${r.run}">결과 보기</button>
+        </div>`).join('')
+        : '<p class="lead">아직 진단을 마치신 적이 없습니다. 아래에서 시작하실 수 있습니다.</p>'}
+    </div>
+    ${inProgress ? `<div class="card brand">
+      <div class="kv"><b>진행 중</b><span>이 브라우저에서 ${inProgress}/${DATA.meta.count}문항까지 답하셨습니다.</span></div>
+      <p class="muted">응답은 이 브라우저에만 저장됩니다. <b style="color:var(--ink)">다른 기기에서는 이어서 하실 수 없습니다.</b></p>
+      <div class="row"><button class="btn" id="resume">이어서 응답</button>
+        <button class="btn ghost sm" id="dropDraft">지우고 새로 시작</button></div>
+    </div>` : `<div class="row"><button class="btn" id="startNew">새 진단 시작하기</button></div>`}
+    <p class="muted" style="margin-top:18px">지난 결과는 언제든 다시 여실 수 있습니다.
+      화면에서 바로 보시거나 PDF로 내려받으십시오.
+      ${days != null && days < 30 ? `<br>직전 진단이 ${days}일 전입니다.` : ''}</p>
+  </div></section>`;
+};
 
 SCREENS.intro = () => `
 <section class="scr"><div class="wrap">
@@ -473,10 +538,10 @@ SCREENS.result = () => {
       <div class="tab on" data-tab="task">보완 과제</div>
       <div class="tab" data-tab="notes">읽으실 때 감안할 점</div>
       <div class="tab" data-tab="metric">경영지표</div>
-      ${ADMIN ? '<div class="tab" data-tab="answers">문항별 응답</div>'
+      ${isAdmin() ? '<div class="tab" data-tab="answers">문항별 응답</div>'
               : '<div class="tab" data-tab="next">70문항 정밀진단</div>'}
       <div class="sp" style="flex:1"></div>
-      ${ADMIN ? '<div class="tab" id="toDash">← 대시보드</div>' : ''}
+      ${isAdmin() ? '<div class="tab" id="toDash">← 대시보드</div>' : '<div class="tab" id="toHome">← 진단 이력</div>'}
       <div class="tab" id="dlPdf">PDF 내려받기</div>
     </div>
   </div></div>
@@ -507,42 +572,29 @@ function radar(cs){
   return `<svg viewBox="0 0 320 300" style="width:100%;height:auto">${web}${poly}${labels}</svg>`;
 }
 
-SCREENS.done = () => `<section class="scr"><div class="wrap">
-  <h1 class="h-l">제출이 끝났습니다</h1>
-  <p class="lead">결과는 위 화면에서 확인하실 수 있습니다.</p>
-  <div class="row"><button class="btn ghost" id="backLanding">처음으로</button></div></div></section>`;
+/* SCREENS.done 폐기 — 결과 화면이 종착점이라 아무도 오지 않았다(설계정본 §3-2) */
 
 /* ══════════════ 관리자 대시보드 ══════════════ */
 
-SCREENS.adminLogin = () => `
-<section class="scr"><div class="wrap" style="max-width:420px;padding-top:40px">
-  <div class="eyebrow">운영기관 전용</div>
-  <h1 class="h-l">관리자 대시보드</h1>
-  <p class="lead">응답 이력과 결과를 열람합니다. 코드는 편집기에서 <code>showAdminCode()</code>로 확인하십시오.</p>
-  <div class="card">
-    <label class="f" for="fAdm">관리자 코드</label>
-    <input type="password" id="fAdm" placeholder="6자리" autocomplete="off">
-    <div class="err hide" id="admErr"></div>
-    <div class="row"><button class="btn" id="doAdmin">확인</button></div>
-  </div>
-  <p class="muted">여기서 보이는 응답과 소견은 기업 개인의 판단 기록입니다.
-     열람 범위 밖으로 옮기지 마십시오.</p>
-</div></section>`;
-
 SCREENS.admin = () => {
-  const L = A.list;
+  const L = V.list;
   if(!L) return `<section class="scr"><div class="wrap" style="padding-top:40px">
     <p class="lead">이력을 불러오는 중입니다.</p></div></section>`;
   const t = L.totals || {};
   const rows = (L.users||[]).map(u => {
     const last = (u.history||[])[0];
-    const open = A.open === u.cid;
+    const open = V.open === u.cid;
     const head = `
       <tr class="clk" data-cid="${esc(u.cid)}">
         <td><b style="color:var(--ink)">${esc(u.cid)}</b></td>
         <td>${esc(u.company) || '<span class="none">미기재</span>'}</td>
-        <td>${u.status === 'active' ? '<span class="tag">사용</span>'
-              : `<span class="tag off">${esc(u.status)}</span>`}</td>
+        <td>${u.locked
+              ? `<span class="tag off">🔒 ${u.lock_hours}h</span>
+                 <button class="btn sm ghost doUnlock" data-cid="${esc(u.cid)}"
+                   style="margin-left:6px">해제</button>`
+              : u.status === 'active'
+                ? `<span class="tag">사용</span>${u.fails ? `<span class="muted" style="margin-left:6px">실패 ${u.fails}</span>` : ''}`
+                : `<span class="tag off">${esc(u.status)}</span>`}</td>
         <td class="num">${u.runs || '<span class="none">0</span>'}</td>
         <td class="num">${last ? esc(last.total) : '<span class="none">—</span>'}</td>
         <td>${last ? esc(last.ts) : '<span class="none">응답 없음</span>'}</td>
@@ -594,7 +646,7 @@ SCREENS.admin = () => {
 };
 
 function paneAnswers(main, side, r){
-  const v = A.view || {};
+  const v = V.view || {};
   const byId = {}; DATA.items.forEach(i => byId[i.id] = i);
   const label = (it, val) => {
     if(val === DATA.na_key) return {t:'아직까지 없었습니다', na:true};
@@ -627,19 +679,32 @@ function paneAnswers(main, side, r){
 }
 
 function adminLoad(){
-  api('adminList', {token: A.token}).then(r => {
-    if(!r || !r.ok){ A.token=''; asave(); ago('adminLogin'); return; }
-    A.list = r; render();
+  api('adminList', {token: S.token}).then(r => {
+    if(!r || !r.ok) return logout(true);
+    V.list = r; render();
   }).catch(() => { const c = $('#app');
     if(c) c.innerHTML = '<section class="scr"><div class="wrap"><p class="err">'
       + '서버에 닿지 못했습니다.</p></div></section>'; });
 }
 
-function adminOpenRun(cid, run){
-  api('adminRun', {token: A.token, cid, run}).then(r => {
-    if(!r || !r.ok){ alert('결과를 불러오지 못했습니다. ' + ((r&&r.error)||'')); return; }
-    A.view = r; A.tab = 'task'; ago('result');
-  }).catch(() => alert('서버에 닿지 못했습니다.'));
+function myLoad(){
+  api('myRuns', {token: S.token}).then(r => {
+    if(!r || !r.ok) return logout(true);
+    V.myRuns = r;
+    if(r.company) { S.company = r.company; save(); }
+    render();
+  }).catch(() => { V.myRuns = {runs:[]}; render(); });
+}
+
+/* 회차 상세 — 관리자는 아무 기업이나, 기업은 자기 것만.
+   🔴 소유자 검사는 서버가 한다(myRun_ 은 토큰의 cid 로만 연다). 여기 분기는 편의일 뿐이다. */
+function openRun(cid, run){
+  const adm = isAdmin();
+  api(adm ? 'adminRun' : 'myRun', adm ? {token:S.token, cid, run} : {token:S.token, run})
+    .then(r => {
+      if(!r || !r.ok){ alert('결과를 불러오지 못했습니다. ' + ((r&&r.error)||'')); return; }
+      V.view = r; S.tab = 'task'; go('result');
+    }).catch(() => alert('서버에 닿지 못했습니다.'));
 }
 
 function stepbar(n){
@@ -649,18 +714,43 @@ function stepbar(n){
 }
 const allConsent = () => CONSENT.every(c => S.consent[c.k]);
 
+/* ══════════════ 껍데기 — 화면이 바뀌어도 남는다 ══════════════
+   윗줄=신원(누가 접속했나) · 아랫줄=문맥(지금 어디인가).
+   전환할 때 이 두 줄은 다시 그리지 않으므로 페이지가 바뀐 느낌이 줄어든다. */
+function renderShell(){
+  const who = $('#who'), ctx = $('#ctx');
+  if(!who || !ctx) return;
+
+  who.innerHTML = S.token ? `
+    <b>${esc(S.company || S.cid)}</b>
+    <span class="rolechip ${isAdmin()?'adm':''}">${isAdmin()?'운영기관':'기업'}</span>
+    <button class="lnk" id="shOut">로그아웃</button>` : '';
+
+  let inner = '';
+  if(S.screen === 'survey' || FLOW.indexOf(S.screen) >= 0){
+    const n = {intro:1, consent:2, who:3, survey:4, scoring:5}[S.screen] || 1;
+    inner = stepbar(n);
+  } else if(S.token && !isAdmin() && S.screen !== 'home'){
+    inner = `<button class="lnk" id="shHome">← 진단 이력</button>`;
+  } else if(isAdmin() && S.screen === 'result'){
+    inner = `<button class="lnk" id="shDash">← 대시보드</button>`;
+  }
+  ctx.innerHTML = inner ? `<div class="in">${inner}</div>` : '';
+
+  const on = (sel, fn) => { const e = $(sel); if(e) e.addEventListener('click', fn); };
+  on('#shOut', askLogout);
+  on('#shHome', () => { V.view = null; go('home'); });
+  on('#shDash', () => { V.view = null; go('admin'); });
+}
+
 /* ── 렌더·이벤트 ── */
 function render(){
-  if(ADMIN){
-    app.innerHTML = (SCREENS[A.screen] || SCREENS.adminLogin)();
-    bind();
-    if(A.screen === 'admin' && !A.list) adminLoad();
-    if(A.screen === 'result') tab(A.tab || 'task');
-    return;
-  }
   app.innerHTML = (SCREENS[S.screen] || SCREENS.landing)();
+  renderShell();
   bind();
-  if(S.screen === 'result') tab('task');
+  if(S.screen === 'home' && !V.myRuns) myLoad();
+  if(S.screen === 'admin' && !V.list) adminLoad();
+  if(S.screen === 'result') tab(S.tab || 'task');
   if(S.screen === 'scoring') submit();
 }
 
@@ -668,23 +758,33 @@ function bind(){
   const on = (sel, fn, ev) => { const e = $(sel); if(e) e.addEventListener(ev||'click', fn); };
 
   /* 관리자 */
-  on('#doAdmin', doAdminLogin);
-  on('#admReload', () => { A.list = null; render(); });
-  on('#admOut', () => { A.token=''; A.list=null; A.view=null; asave(); ago('adminLogin'); });
-  on('#toDash', () => { A.view = null; ago('admin'); });
-  const fAdm = $('#fAdm');
-  if(fAdm) fAdm.addEventListener('keydown', e => { if(e.key === 'Enter') doAdminLogin(); });
+  on('#admReload', () => { V.list = null; render(); });
+  on('#admOut', askLogout);
+  on('#toDash', () => { V.view = null; go('admin'); });
   document.querySelectorAll('.tbl tr.clk').forEach(el =>
     el.addEventListener('click', () => {
-      A.open = (A.open === el.dataset.cid) ? '' : el.dataset.cid; render(); }));
+      V.open = (V.open === el.dataset.cid) ? '' : el.dataset.cid; render(); }));
   document.querySelectorAll('.openRun').forEach(el =>
     el.addEventListener('click', e => { e.stopPropagation();
-      adminOpenRun(el.dataset.cid, Number(el.dataset.run)); }));
+      openRun(el.dataset.cid, Number(el.dataset.run)); }));
+  document.querySelectorAll('.doUnlock').forEach(el =>
+    el.addEventListener('click', e => { e.stopPropagation(); doUnlock(el.dataset.cid); }));
 
-  on('#doReset', askReset);
+  /* 기업 홈 */
+  document.querySelectorAll('.openMine').forEach(el =>
+    el.addEventListener('click', () => openRun(S.cid, Number(el.dataset.run))));
+  on('#toHome', () => { V.view = null; go('home'); });
+  on('#resume', () => go('survey'));
+  on('#startNew', startNew);
+  on('#dropDraft', () => {
+    if(!confirm(`응답한 ${answered()}문항을 지우고 처음부터 시작합니다.\n\n계속하시겠습니까?`)) return;
+    S.ans = {}; S.dwell = {}; S.page = 0; S.consent = {c1:0,c2:0,c3:0,c4:0};
+    S.cond = {}; save(); go('intro');
+  });
+
   on('#goLogin', () => go('login'));
-  on('#goResume', () => go(S.cid ? (answered() ? 'survey' : 'intro') : 'login'));
-  on('#backLanding', () => go('landing'));
+  on('#goResume', () => go(S.token ? 'home' : 'login'));
+  on('#backLanding', () => go(S.token ? 'home' : 'landing'));
   on('#backLogin', () => go('login'));
   on('#backIntro', () => go('intro'));
   on('#backConsent', () => go('consent'));
@@ -721,32 +821,58 @@ function bind(){
     el.addEventListener('click', () => tab(el.dataset.tab)));
 }
 
-function doAdminLogin(){
-  const code = ($('#fAdm').value||'').trim(), err = $('#admErr');
-  if(!code){ err.textContent = '코드를 입력해 주십시오.'; err.classList.remove('hide'); return; }
-  err.classList.add('hide');
-  api('adminLogin', {code}).then(r => {
-    if(!r || !r.ok){ err.textContent = '코드가 맞지 않습니다.'; err.classList.remove('hide'); return; }
-    A.token = r.token; A.list = null; asave(); ago('admin');
-  }).catch(() => { err.textContent = '서버에 닿지 못했습니다.'; err.classList.remove('hide'); });
+function doUnlock(cid){
+  if(!confirm(`${cid} 의 로그인 잠금을 해제합니다.\n\n계속하시겠습니까?`)) return;
+  api('unlock', {token: S.token, cid}).then(r => {
+    if(!r || !r.ok){ alert('해제하지 못했습니다. ' + ((r&&r.error)||'')); return; }
+    V.list = null; render();
+  }).catch(() => alert('서버에 닿지 못했습니다.'));
+}
+
+/* 재진단 — 막지 않는다. 30일 이내면 한 번 알린다.
+   문항이 최근 3개월 행동을 묻기 때문에 짧은 간격으로는 답이 거의 같게 나온다. */
+function startNew(){
+  const d = V.myRuns && V.myRuns.days_since_last;
+  if(d != null && d < 30 && !confirm(
+      `직전 진단이 ${d}일 전입니다.\n`
+      + `문항이 최근 3개월 동안의 행동을 묻기 때문에 답이 크게 달라지지 않을 수 있습니다.\n\n`
+      + `그래도 새로 시작하시겠습니까?`)) return;
+  S.ans = {}; S.dwell = {}; S.page = 0; S.result = null;
+  S.consent = {c1:0,c2:0,c3:0,c4:0}; S.cond = {}; S.started = Date.now();
+  save(); go('intro');
 }
 
 function doLogin(){
   const cid = ($('#fCid').value||'').trim(), code = ($('#fCode').value||'').trim();
   const err = $('#loginErr');
-  if(!cid || !code){ err.textContent = '접수번호와 코드를 모두 입력해 주십시오.';
-    err.classList.remove('hide'); return; }
-  S.cid = cid; S.code = code; S.started = Date.now(); save();
-  if(LOCAL){ go('intro'); return; }
+  const fail = t => { err.textContent = t; err.classList.remove('hide'); };
+  if(!cid || !code) return fail('아이디와 접속 코드를 모두 입력해 주십시오.');
   err.classList.add('hide');
+
+  if(LOCAL){ S.cid = cid; S.role = 'company'; S.token = 'local';
+    S.company = '(로컬 검수)'; S.started = Date.now(); save(); return go('home'); }
+
   api('login', {cid, code}).then(r => {
-    if(!r || !r.ok){ err.textContent = r && r.error === 'revoked'
-        ? '사용할 수 없는 코드입니다. 운영기관으로 문의해 주십시오.'
-        : '접수번호 또는 코드가 맞지 않습니다.';
-      err.classList.remove('hide'); return; }
-    S.token = r.token; S.company = r.company || ''; save(); go('intro');
-  }).catch(() => { err.textContent = '접속에 실패했습니다. 잠시 후 다시 시도해 주십시오.';
-    err.classList.remove('hide'); });
+    if(!r || !r.ok){
+      if(r && r.error === 'locked')
+        return fail(`${LOGIN_MAX}회 잘못 입력하여 잠겼습니다. `
+          + `약 ${r.hours || 24}시간 뒤 다시 시도하실 수 있습니다. `
+          + `급하시면 운영기관으로 문의해 주십시오.`);
+      if(r && r.error === 'revoked')
+        return fail('사용할 수 없는 계정입니다. 운영기관으로 문의해 주십시오.');
+      const left = r && typeof r.left === 'number' ? r.left : null;
+      return fail('아이디 또는 접속 코드가 맞지 않습니다.'
+        + (left != null ? ` (남은 시도 ${left}회)` : ''));
+    }
+    /* 🔴 역할이 바뀌면 이전 응답을 비운다 — 관리자가 쓰던 브라우저에 기업 응답이
+       남아 있거나 그 반대인 상태를 막는다. */
+    if(S.role && S.role !== r.role){ S.ans = {}; S.dwell = {}; S.page = 0; S.result = null; }
+    S.token = r.token; S.role = r.role; S.cid = r.cid || cid;
+    S.company = r.company || ''; S.started = Date.now();
+    V.list = null; V.myRuns = null; V.view = null; V.open = '';
+    save();
+    go(r.role === 'admin' ? 'admin' : 'home');
+  }).catch(() => fail('접속에 실패했습니다. 잠시 후 다시 시도해 주십시오.'));
 }
 
 function toSurvey(){
@@ -819,7 +945,7 @@ function tab(name){
   document.querySelectorAll('.tab[data-tab]').forEach(t =>
     t.classList.toggle('on', t.dataset.tab === name));
   const r = RES(), main = $('#paneMain'), side = $('#paneSide');
-  if(ADMIN){ A.tab = name; asave(); }
+  S.tab = name; save();
   if(!r || !main) return;
   if(name === 'answers') return paneAnswers(main, side, r);
   if(name === 'task') return paneTask(main, side, r);
@@ -1031,11 +1157,13 @@ const SAMPLE = {
 };
 
 if(LOCAL && !S.result) S.result = null;
-if(ADMIN){
-  if(!A.token) A.screen = 'adminLogin';
-  else if(A.screen === 'adminLogin') A.screen = 'admin';
-  if(A.screen === 'result' && !A.view) A.screen = 'admin';   // 새로고침하면 상세는 사라진다
-}
+/* ── 첫 진입 정리 ──
+   🔴 상세 결과(V.view)는 저장하지 않는다. 새로고침하면 목록으로 돌려보낸다.
+      저장하면 처방 문구를 고쳐도 옛 사본이 남는다. */
+if(!S.token && S.screen !== 'landing' && S.screen !== 'login') S.screen = 'landing';
+if(S.token && S.screen === 'result') S.screen = isAdmin() ? 'admin' : 'home';
+if(S.token && (S.screen === 'landing' || S.screen === 'login'))
+  S.screen = isAdmin() ? 'admin' : 'home';
 render();
 </script>
 </body>
