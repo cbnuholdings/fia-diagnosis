@@ -1725,20 +1725,276 @@ function loadOnce(src){
     document.head.appendChild(s);
   });
 }
+/* ══════════════ 7쪽 정식 보고서 ══════════════
+   시안 = 「원페이지 HTML 와이어프레임 3안.pdf」(7쪽)
+   ① 표지 ② 종합 결과 ③~ 보완 과제(영역마다) ④ 90일 점검표·경영지표
+   ⑤ 문항의 성격·응답 패턴·한계
+
+   🔴 스타일 선택자를 전부 `#pdfArea` 로 한정한다. 스코프 없는 <style> 을
+      넣었다가 화면이 통째로 좁아진 적이 있다(2026-08-01).
+   🔴 기한·담당은 **비워 둔다.** 30/60/90일을 자동 배정할 근거가 없다.
+      시안도 「기한과 담당은 귀사가 채우십시오」로 적고 있다.
+   ══════════════════════════════════════════ */
+const PDF_CSS = `
+#pdfArea{width:794px;font-family:Pretendard,-apple-system,"Malgun Gothic",sans-serif;
+  color:#46525F;line-height:1.62;background:#fff;font-size:13px}
+#pdfArea .pg{padding:38px 46px 30px;position:relative;min-height:1050px;box-sizing:border-box}
+#pdfArea .hd{display:flex;align-items:baseline;border-bottom:2px solid #A8265A;
+  padding-bottom:9px;margin-bottom:22px}
+#pdfArea .hd b{color:#A8265A;font-size:12.5px;letter-spacing:.06em}
+#pdfArea .hd .r{margin-left:auto;color:#98A2AE;font-size:11.5px}
+#pdfArea .ft{position:absolute;left:46px;right:46px;bottom:16px;display:flex;
+  color:#98A2AE;font-size:10.5px;border-top:1px solid #E4E9F0;padding-top:9px}
+#pdfArea .ft .r{margin-left:auto}
+#pdfArea h1{font-size:30px;color:#101828;margin:0 0 6px;line-height:1.3}
+#pdfArea h2{font-size:17px;color:#101828;margin:0 0 6px}
+#pdfArea h3{font-size:14px;color:#101828;margin:16px 0 6px}
+#pdfArea .eyebrow{color:#A8265A;font-size:11.5px;font-weight:700;letter-spacing:.1em}
+#pdfArea .rule{width:64px;height:3px;background:#A8265A;margin:14px 0 18px}
+#pdfArea .lead{font-size:13.5px;color:#46525F;margin:8px 0}
+#pdfArea .muted{color:#8A93A0;font-size:11.5px}
+#pdfArea table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+#pdfArea th{background:#F6F8FB;color:#101828;text-align:left;padding:9px 11px;
+  border-bottom:1px solid #D9E0E9;font-weight:600;font-size:11.5px}
+#pdfArea td{padding:9px 11px;border-bottom:1px solid #E4E9F0;vertical-align:top}
+#pdfArea td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:#101828}
+#pdfArea .meta{display:flex;flex-wrap:wrap;border:1px solid #E4E9F0;border-radius:8px;overflow:hidden}
+#pdfArea .meta div{width:33.33%;padding:13px 16px;box-sizing:border-box;
+  border-right:1px solid #E4E9F0;border-bottom:1px solid #E4E9F0}
+#pdfArea .meta div .k{color:#8A93A0;font-size:11px}
+#pdfArea .meta div .v{color:#101828;font-weight:700;font-size:14px;margin-top:2px}
+#pdfArea .warn{background:#FDF4EC;border:1px solid #F0D9C4;border-radius:8px;
+  padding:13px 16px;font-size:12px;color:#C05621;margin:14px 0}
+#pdfArea .brandbox{background:#FCF3F7;border:1px solid #F0D6E2;border-radius:8px;
+  padding:13px 16px;margin:12px 0;font-size:12.5px}
+#pdfArea .big{font-size:52px;font-weight:800;color:#A8265A;letter-spacing:-.03em;line-height:1}
+#pdfArea .bar{height:7px;background:#EDEFF3;border-radius:99px;width:74px;display:inline-block;
+  vertical-align:middle;overflow:hidden}
+#pdfArea .bar i{display:block;height:100%;border-radius:99px}
+#pdfArea .cols{display:flex;gap:18px;margin-top:10px}
+#pdfArea .cols>div{flex:1}
+#pdfArea .ck{border-top:1px dashed #E4E9F0;padding:7px 0;font-size:12px}
+#pdfArea .cite{font-size:10.5px;color:#8A93A0;border-top:1px solid #E4E9F0;
+  margin-top:12px;padding-top:9px}
+#pdfArea .pdf-pb{height:0}`;
+
+function pgHead(no, title, r){
+  const m = r.meta || {};
+  return `<div class="hd"><b>${no} · ${esc(title)}</b>
+    <span class="r">${esc(m.company||'')} · ${esc(m.cid||'')} · ${m.run||1}회차</span></div>`;
+}
+function pgFoot(n, total){
+  return `<div class="ft"><span>FIA 창업자 역량진단 결과 보고서 · 파일럿 · 내부 참고용</span>
+    <span class="r">${n} / ${total}</span></div>`;
+}
+const bandColor = b => b === '보완' ? '#C05621' : b === '강점' ? '#14795C' : '#B0B8C4';
+
+function reportHTML(r){
+  const m = r.meta || {}, sc = r.scores || {};
+  const cs = sc.competencies || [];
+  const rx = r.prescriptions || [];
+  const pages = [];
+
+  /* ① 표지 */
+  pages.push(`<div class="pg">
+    <div style="height:26px"></div>
+    <div class="eyebrow">FOUNDER CAPABILITY DIAGNOSIS · ${DATA.meta.count} ITEMS</div>
+    <h1>창업자 역량 자가진단<br>결과 보고서</h1>
+    <div class="rule"></div>
+    <p class="lead">이 보고서는 귀사가 응답하신 ${DATA.meta.count}문항을 바탕으로
+      9개 역량 영역의 현재 위치와 다음에 손댈 자리를 정리한 것입니다.
+      등급을 매기거나 성패를 예측하지 않습니다.</p>
+    <div style="height:300px"></div>
+    <div class="meta">
+      <div><div class="k">기업명</div><div class="v">${esc(m.company||'—')}</div></div>
+      <div><div class="k">접수번호</div><div class="v">${esc(m.cid||'—')}</div></div>
+      <div><div class="k">응답자</div><div class="v">${esc((m.respondent||{}).name||'—')}
+        ${esc((m.respondent||{}).title||'')}</div></div>
+      <div><div class="k">응답일 · 회차</div><div class="v">${esc(m.answered_at||'')} · ${m.run||1}회차</div></div>
+      <div><div class="k">응답 시간</div><div class="v">${Math.floor((m.elapsed||0)/60)}분 ${(m.elapsed||0)%60}초</div></div>
+      <div><div class="k">진단 구성</div><div class="v">${DATA.meta.count}문항 · 산입 ${m.scored_count||'—'}</div></div>
+    </div>
+    <div class="warn"><b>파일럿 · 내부 참고용</b> — 응답 표본이 300건에 이르기 전까지 구간 경계는
+      잠정값입니다. 다른 기업과 견준 값이 아니며,
+      <b>심사·선정 판단이나 지원 배분의 근거로 사용하지 않습니다.</b></div>
+    __FOOT__</div>`);
+
+  /* ② 종합 결과 */
+  const first = rx[0];
+  pages.push(`<div class="pg">${pgHead('01', '종합 결과', r)}
+    <div style="display:flex;align-items:flex-start;gap:22px">
+      <div><span class="muted">종합점수</span>
+        <div><span class="big">${sc.total == null ? '—' : sc.total}</span>
+          <span class="muted"> / 100</span></div></div>
+      ${first ? `<div class="brandbox" style="flex:1;margin:0">다음 단계 —
+        <b style="color:#101828">${esc((first.items||[])[0] ? (first.items[0].headline||'') : first.competency_name)}</b></div>` : ''}
+    </div>
+    <div class="cols">
+      <div>${radar(cs)}</div>
+      <div style="flex:1.25">
+        <table><thead><tr><th>역량</th><th>코드</th><th>구간</th><th style="text-align:right">점수</th></tr></thead>
+        <tbody>${cs.slice().sort((a,b) => (a.score==null) - (b.score==null) || a.score - b.score)
+          .map(c => `<tr>
+            <td style="color:#101828;font-weight:${c.band==='보완'?700:400}">${esc(c.name)}</td>
+            <td class="muted">${esc(c.code)}</td>
+            <td>${c.score==null ? '<span class="muted">총점 미산입 · 오버레이</span>'
+              : `<span class="bar"><i style="width:${Math.max(4,c.score)}%;background:${bandColor(c.band)}"></i></span>
+                 <b style="color:${bandColor(c.band)};font-size:11.5px;margin-left:7px">${esc(c.band)}</b>`}</td>
+            <td class="n">${c.score==null ? '—' : c.score}</td></tr>`).join('')}</tbody></table>
+      </div>
+    </div>
+    ${(r.signal_labels||[]).length ? `<div class="warn" style="margin-top:16px">
+      <b>읽으실 때 감안할 점</b><br>${(r.signal_labels||[]).map(s => md(s)).join('<br>')}</div>` : ''}
+    __FOOT__</div>`);
+
+  /* ③ 보완 과제 — 영역마다 한 쪽 */
+  rx.forEach(p => {
+    const ws = (p.items||[]).flatMap(i => (i.tools||[])
+      .map(t => (DATA.worksheets||{})[String(t.ref||'').trim()]).filter(Boolean));
+    pages.push(`<div class="pg">${pgHead('02', `보완 과제 — ${p.competency_name||p.competency}`, r)}
+      <p class="lead">낮게 나온 영역은 잘못했다는 판정이 아니라 아직 손대지 않은 자리를 가리킵니다.</p>
+      <div class="brandbox">
+        <h2 style="display:inline">${esc(p.competency_name||p.competency)}</h2>
+        <b style="color:#C05621;font-size:11.5px;margin-left:8px">${esc(p.band||'')}</b>
+        <span class="muted" style="float:right">문항 처방 ${(p.items||[]).length}건</span>
+        <p class="lead" style="margin-top:8px">${md(p.why||'')}</p>
+      </div>
+      ${(p.items||[]).map(i => `<div style="margin-top:14px">
+        <div style="background:#F6F8FB;border-radius:7px;padding:9px 13px;
+          color:#101828;font-weight:600;font-size:12.5px">${esc(i.headline||'')}</div>
+        <div class="cols">
+          <div><h3>점검 항목</h3>${(i.checks||[]).map(c =>
+            `<div class="ck">☐ ${md(c)}</div>`).join('')}</div>
+          <div><h3>실행 도구</h3>${(i.tools||[]).map(t =>
+            `<div class="ck">· ${esc(t.ref||'')} 「${esc(t.title||'')}」
+              <span class="muted">${esc(t.time||'')}</span></div>`).join('') || '<div class="ck muted">향후 업데이트 예정</div>'}</div>
+          <div><h3>경영지표</h3>${(i.metrics||[]).map(x =>
+            `<div class="ck">· ${esc(x.label||x.name||'')} _______</div>`).join('') || '<div class="ck muted">해당 없음</div>'}</div>
+        </div>
+        ${i.citation ? `<div class="cite">참고 — ${esc(i.citation.title||'')}
+          ${i.citation.source?`(${esc(i.citation.source)})`:''}${i.citation.note?` : ${esc(i.citation.note)}`:''}
+          · 근거 수준 ${esc(i.citation.evidence_level||'')}</div>` : ''}
+      </div>`).join('')}
+      __FOOT__</div>`);
+
+    /* 워크시트 서식 — 있으면 이어서 */
+    ws.slice(0, 2).forEach(w => {
+      const t = w.table || {head:[], rows:[]};
+      const cols = t.head.length || 2;
+      const body = (t.rows||[]).concat(Array.from({length:Math.max(0,6-(t.rows||[]).length)},
+        () => Array(cols).fill('')));
+      pages.push(`<div class="pg">${pgHead('02', `실행 도구 — ${w.ref}`, r)}
+        <h2>${esc(w.ref)} 「${esc(w.title)}」
+          <span class="muted" style="font-weight:400">${esc(w.time||'')}</span></h2>
+        ${t.head.length
+          ? `<table><thead><tr>${t.head.map(h=>`<th>${md(h)}</th>`).join('')}</tr></thead>
+             <tbody>${body.map(rw=>`<tr>${Array.from({length:cols},(_,k)=>
+               `<td style="height:34px">${md(rw[k]||'')}</td>`).join('')}</tr>`).join('')}</tbody></table>`
+          : (w.paras||[]).map(x=>`<p class="lead">${md(x)}</p>`).join('')}
+        ${(w.notes||[]).map(n=>`<div class="brandbox">${md(n)}</div>`).join('')}
+        <div class="cite">${w.source ? '출처 — ' + esc(w.source) + '<br>' : ''}
+          워크시트 원본은 창업 교재가 정본입니다. 이 보고서에는 해당 시트의 서식만 옮겼으며,
+          작성 결과는 교재 서식에 남기시는 편이 관리에 낫습니다.</div>
+        __FOOT__</div>`);
+    });
+  });
+
+  /* ④ 점검표 · 경영지표 */
+  const allChecks = rx.flatMap(p => (p.items||[]).flatMap(i =>
+    (i.checks||[]).map(c => ({t:c, comp:p.competency_name||p.competency}))));
+  const mets = rx.flatMap(p => (p.items||[]).flatMap(i => i.metrics||[]));
+  pages.push(`<div class="pg">${pgHead('03', '점검표와 경영지표', r)}
+    <h2>점검표</h2>
+    <p class="muted">문항 처방에서 자동으로 뽑힌 항목입니다. <b style="color:#101828">기한과 담당은 귀사가 채우십시오.</b></p>
+    <table><thead><tr><th style="width:26px">✓</th><th>점검 항목</th><th style="width:96px">영역</th>
+      <th style="width:64px">기한</th><th style="width:64px">담당</th></tr></thead>
+      <tbody>${allChecks.map(c => `<tr><td>☐</td><td>${md(c.t)}</td>
+        <td class="muted">${esc(c.comp)}</td><td></td><td></td></tr>`).join('')
+        || '<tr><td colspan="5" class="muted">보완 구간 영역이 없어 점검 항목이 없습니다.</td></tr>'}</tbody></table>
+    <h2 style="margin-top:20px">경영지표</h2>
+    <p class="muted">값은 귀사가 입력·수정합니다. 점수에 반영되지 않습니다.</p>
+    <table><thead><tr><th>지표</th><th style="width:120px">현재</th><th style="width:120px">목표</th></tr></thead>
+      <tbody>${dedupe(mets).map(x => `<tr><td>${esc(x.label||x.name||'')}</td>
+        <td></td><td></td></tr>`).join('') || '<tr><td colspan="3" class="muted">해당 없음</td></tr>'}</tbody></table>
+    __FOOT__</div>`);
+
+  /* ⑤ 문항의 성격 · 응답 패턴 · 한계 */
+  const cn = r.consensus || {};
+  const sg = r.signals || {};
+  pages.push(`<div class="pg">${pgHead('04', '문항의 성격 · 응답 패턴 · 안내', r)}
+    <h2>문항의 성격</h2>
+    <p class="muted">경영에는 견해가 모이는 영역과 갈리는 영역이 함께 있습니다.
+      응답하실 때는 표시하지 않았고 결과에서만 말씀드립니다.</p>
+    <table><thead><tr><th>구간</th><th style="width:56px">문항</th><th>기업이 할 일</th></tr></thead><tbody>
+      <tr><td><b style="color:#101828">의견이 모이는 구간</b></td><td class="n">${cn.universal||0}</td>
+        <td>판단이 아니라 실행의 문제입니다. 도입을 미루지 마십시오.</td></tr>
+      <tr><td><b style="color:#101828">상황에 따라 달라지는 구간</b></td><td class="n">${cn.contingent||0}</td>
+        <td>우리 업종·단계에 맞는 쪽을 고르시면 됩니다. 어느 결론이 옳은지 판정하지 않습니다.</td></tr>
+      <tr><td><b style="color:#101828">전문가에 따라 의견이 갈리는 구간</b></td><td class="n">${cn.contested||0}</td>
+        <td>상반된 조언을 받아도 정상입니다. <b style="color:#101828">대표가 정하셔야 합니다.</b>
+          점수에 넣지 않고 성향만 기록했습니다.</td></tr>
+      <tr><td><b style="color:#101828">여러 길이 있는 구간</b></td><td class="n">${cn.equifinal||0}</td>
+        <td>무엇을 고르시든 일관되게 미시는 편이 낫습니다.</td></tr>
+    </tbody></table>
+    <div class="cols">
+      <div><h2>응답 패턴 신호</h2>
+        <table><tbody>
+          <tr><td>동일 응답 연속</td><td class="n">${sg.straightline ? '해당' : '해당 없음'}</td></tr>
+          <tr><td>문항당 3초 미만</td><td class="n">${sg.fast_items||0} / ${DATA.meta.count}</td></tr>
+          <tr><td>일관성 쌍 불일치</td><td class="n">${sg.consistency_conflict||0}건</td></tr>
+          <tr><td>총 응답 시간</td><td class="n">${Math.floor((m.elapsed||0)/60)}분 ${(m.elapsed||0)%60}초</td></tr>
+        </tbody></table>
+        <p class="muted">이 신호는 점수를 깎지 않습니다.</p></div>
+      <div><h2>기록된 성향</h2>
+        ${r.profile && r.profile.display
+          ? `<div class="brandbox">${md(r.profile.display)}
+             ${r.profile.note ? `<div class="muted" style="margin-top:6px">${md(r.profile.note)}</div>` : ''}</div>`
+          : '<p class="muted">기록된 성향이 없습니다.</p>'}
+        <div class="brandbox"><b style="color:#101828">다음 진단</b><br>
+          70문항 정밀진단으로 이어가실 수 있으며, 재진단은 6~12개월 주기를 권합니다.</div></div>
+    </div>
+    <div class="warn"><b>이 보고서의 한계</b><br>
+      ① 전부 자가보고이며 외부 자료와 대조하지 않았습니다.
+      ② 응답 표본 300건 전까지 구간 경계는 잠정값입니다.
+      ③ 사업 아이템의 성패를 예측하지 않습니다.
+      ④ ${DATA.meta.count}문항은 개괄이라 영역 안의 세부 차이는 잡지 않습니다.<br>
+      <b>본 진단 결과는 심사·선정 판단이나 지원 배분의 근거로 사용하지 않습니다.</b></div>
+    __FOOT__</div>`);
+
+  const total = pages.length;
+  return `<style>${PDF_CSS}</style>`
+    + pages.map((p, i) => p.replace('__FOOT__', pgFoot(i + 1, total)))
+        .join('<div class="pdf-pb"></div>');
+}
+
 async function downloadPdf(){
   const btn = $('#dlPdf'); const old = btn ? btn.textContent : '';
+  let host = null;
   try{
     if(btn) btn.textContent = '준비 중…';
+    busy(true, '보고서를 만드는 중입니다…');
     await loadOnce(CDN.h2c); await loadOnce(CDN.jspdf);
-    const secs = [document.querySelector('.res-head'), $('#paneMain'), $('#paneSide')]
-      .filter(el => el && el.offsetHeight > 0);
+
+    /* 🔴 화면을 캡처하지 않는다. 7쪽 정식 서식을 따로 조립해 캡처한다.
+       화면 밖 host(fixed·opacity 0) 안에 **static 자식**으로 넣어야 높이가 0이 되지 않는다
+       (플레이북 패턴_클라이언트PDF_섹션보고서생성). */
+    host = document.createElement('div');
+    host.style.cssText = 'position:fixed;left:0;top:0;opacity:0;pointer-events:none;z-index:-1';
+    const area = document.createElement('div');
+    area.id = 'pdfArea';
+    area.innerHTML = reportHTML(RES());
+    host.appendChild(area);
+    document.body.appendChild(host);
+    await new Promise(res => setTimeout(res, 260));   // 폰트·레이아웃 안정
+
+    const secs = Array.from(area.querySelectorAll('.pg'));
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({unit:'mm', format:'a4', orientation:'p'});
     const W = 210, H = 297, M = 10, availW = W - M*2, availH = H - M*2;
     let first = true;
     for(const el of secs){
       const cv = await html2canvas(el, {scale:2, backgroundColor:'#ffffff',
-        width: el.scrollWidth, windowWidth: el.scrollWidth});
+        width: 794, windowWidth: 794, scrollX:0, scrollY:0});
       const imgH = availW * cv.height / cv.width;
       let y = 0;
       while(y < imgH - 0.5){
@@ -1755,10 +2011,14 @@ async function downloadPdf(){
       }
     }
     const m = (RES() && RES().meta) || {};
-    pdf.save(`FIA_${m.cid||'result'}_R${m.run||1}.pdf`);
+    pdf.save(`FIA_결과보고서_${m.cid||'result'}_R${m.run||1}.pdf`);
   }catch(e){
     alert('PDF를 만들지 못했습니다. 인터넷 연결을 확인해 주십시오.');
-  }finally{ if(btn) btn.textContent = old || 'PDF 내려받기'; }
+  }finally{
+    busy(false);
+    if(host && host.parentNode) host.parentNode.removeChild(host);   // 🔴 반드시 걷어낸다
+    if(btn) btn.textContent = old || 'PDF 내려받기';
+  }
 }
 
 /* ── 로컬 검수용 예시 결과 (채점하지 않음) ── */
