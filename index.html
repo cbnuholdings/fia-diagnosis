@@ -756,7 +756,9 @@ function panePlan(main, side, r){
     const picks = {}; picked.forEach(k => picks[k] = S.plan[k]);
     api('simulate', {token:S.token, run, cid:(r.meta||{}).cid, picks}).then(x => {
       busy(false);
-      if(!x || !x.ok){ main.innerHTML = `<div class="card"><p class="err">계산에 실패했습니다. ${esc((x&&x.error)||'')}</p></div>`; return; }
+      if(!x || !x.ok){ main.innerHTML = `<div class="card">
+        <h3 class="h-m">계산하지 못했습니다</h3>
+        <p class="lead">${esc(apiErrText(x && x.error))}</p></div>`; return; }
       V.sim = x; V.simFor = key; tab('plan');
     }).catch(() => { busy(false);
       main.innerHTML = `<div class="card"><p class="err">서버에 닿지 못했습니다.</p></div>`; });
@@ -917,7 +919,7 @@ function openRun(cid, run){
   api(adm ? 'adminRun' : 'myRun', adm ? {token:S.token, cid, run} : {token:S.token, run})
     .then(r => {
       busy(false);
-      if(!r || !r.ok){ alert('결과를 불러오지 못했습니다. ' + ((r&&r.error)||'')); return; }
+      if(!r || !r.ok){ alert('결과를 불러오지 못했습니다.\n' + apiErrText(r && r.error)); return; }
       V.view = r; S.tab = 'notes'; go('result');
     }).catch(() => { busy(false); alert('서버에 닿지 못했습니다.'); });
 }
@@ -1328,7 +1330,8 @@ function doSavePlan(){
   busy(true, '계획을 저장하는 중입니다…');
   api('savePlan', {token:S.token, run:(r.meta||{}).run||0, picks, labels}).then(x => {
     busy(false);
-    alert(x && x.ok ? `${x.saved}건을 저장했습니다.` : '저장하지 못했습니다.');
+    alert(x && x.ok ? `${x.saved}건을 저장했습니다.`
+      : '저장하지 못했습니다.\n' + apiErrText(x && x.error));
   }).catch(() => { busy(false); alert('서버에 닿지 못했습니다.'); });
 }
 
@@ -1337,7 +1340,7 @@ function doUnlock(cid){
   busy(true, '잠금을 해제하는 중입니다…');
   api('unlock', {token: S.token, cid}).then(r => {
     busy(false);
-    if(!r || !r.ok){ alert('해제하지 못했습니다. ' + ((r&&r.error)||'')); return; }
+    if(!r || !r.ok){ alert('해제하지 못했습니다.\n' + apiErrText(r && r.error)); return; }
     V.list = null; render();
   }).catch(() => { busy(false); alert('서버에 닿지 못했습니다.'); });
 }
@@ -1446,10 +1449,24 @@ function submit(){
       e.textContent = '채점에 실패했습니다. ' + ((r && r.error) || '');
       e.classList.remove('hide'); return; }
     logline('처방 번들 조회 중');
-    S.result = r.result; save(); go('result');
+    /* 새 회차가 생겼으니 이력·시뮬레이션 캐시를 버린다 */
+    S.result = r.result; S.plan = {}; S.tab = 'notes';
+    V.myRuns = null; V.sim = null; V.simFor = ''; V.view = null;
+    save(); go('result');
   }).catch(() => { const e = $('#scoreErr');
     e.textContent = '서버에 닿지 못했습니다. 응답은 저장되어 있으니 잠시 후 다시 시도해 주십시오.';
     e.classList.remove('hide'); });
+}
+
+/* 🔴 서버 코드를 고치고 **재배포를 안 하면** 새 기능이 unknown_action 으로 돌아온다.
+   「계산에 실패했습니다」로만 보이면 원인을 못 찾는다(2026-08-01 실제로 헤맸다). */
+function apiErrText(err){
+  if(err === 'unknown_action')
+    return '서버가 아직 갱신되지 않았습니다. 운영기관에 재배포를 요청해 주십시오.';
+  if(err === 'unauthorized') return '접속이 만료되었습니다. 다시 로그인해 주십시오.';
+  if(err === 'notfound') return '해당 회차를 찾지 못했습니다.';
+  if(err === 'noanswers') return '이 회차에 저장된 응답이 없습니다.';
+  return err ? '오류 — ' + err : '';
 }
 
 function api(action, payload){
@@ -1762,7 +1779,9 @@ function goHome(){
      && !confirm('응답을 멈추고 진단 이력으로 돌아갑니다.\n'
        + '지금까지 답하신 내용은 이 브라우저에 남아 이어서 하실 수 있습니다.\n\n돌아가시겠습니까?'))
     return;
-  V.view = null;
+  /* 🔴 이력을 다시 받는다. 안 그러면 로그인 때 받은 옛 값이 그대로 보여
+     방금 제출한 회차가 없는 것처럼 나온다(2026-08-01 보고). */
+  V.view = null; V.myRuns = null; V.list = null;
   go(isAdmin() ? 'admin' : 'home');
 }
 (function bindOnce(){
