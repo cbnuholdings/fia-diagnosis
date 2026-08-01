@@ -15,7 +15,7 @@
   --line:#E4E9F0; --rule:#D9E0E9; --thead:#F6F8FB; --page:#FBFCFD;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Pretendard,-apple-system,system-ui,"Malgun Gothic",sans-serif;
+body{font-family:Pretendard,-apple-system,system-ui,"Malgun Gothic",sans-serif;font-size:14.5px;
   color:var(--body);background:var(--page);line-height:1.62;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4{color:var(--ink);font-weight:700;line-height:1.35}
 a{color:var(--brand)}
@@ -46,10 +46,10 @@ section.scr{padding:36px 0 72px}
 .h-m{font-size:17px;margin:0 0 8px}
 .lead{font-size:15px;color:var(--body)}
 .muted{color:var(--sub);font-size:13px}
-.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:14px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 22px;margin:14px 0}
 .card.warn{background:var(--warn-bg);border-color:var(--warn-line)}
 .card.brand{background:var(--brand-l);border-color:#F0D6E2}
-.notice{background:var(--brand-l);border:1px solid #F0D6E2;border-radius:10px;
+.notice{background:var(--brand-l);border:1px solid #F0D6E2;border-radius:7px;
   padding:10px 14px;font-size:12.5px;color:var(--brand-d)}
 ul.tight{margin:8px 0 0 18px}
 ul.tight li{margin:4px 0;font-size:14px}
@@ -57,7 +57,7 @@ ul.tight li{margin:4px 0;font-size:14px}
 .kv b{min-width:88px;color:var(--ink);font-weight:600}
 
 /* 버튼 */
-.btn{appearance:none;border:0;border-radius:9px;background:var(--brand);color:#fff;
+.btn{appearance:none;border:0;border-radius:5px;background:var(--brand);color:#fff;
   font:600 15px/1 Pretendard,sans-serif;padding:14px 22px;cursor:pointer;letter-spacing:-.01em}
 .btn:hover{background:var(--brand-d)}
 .btn[disabled]{background:#D6DBE3;color:#fff;cursor:not-allowed}
@@ -69,7 +69,7 @@ ul.tight li{margin:4px 0;font-size:14px}
 
 /* 입력 */
 label.f{display:block;font-size:13px;color:var(--ink);font-weight:600;margin:14px 0 6px}
-input[type=text],select{width:100%;padding:12px 13px;border:1px solid var(--rule);border-radius:9px;
+input[type=text],select{width:100%;padding:12px 13px;border:1px solid var(--rule);border-radius:6px;
   font:400 15px Pretendard,sans-serif;color:var(--ink);background:#fff}
 input:focus,select:focus{outline:2px solid var(--brand);outline-offset:-1px}
 .chk{display:flex;gap:10px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line)}
@@ -86,7 +86,7 @@ input:focus,select:focus{outline:2px solid var(--brand);outline-offset:-1px}
 .q .no{font-size:12px;color:var(--brand);font-weight:600}
 .q .qt{font-size:16px;color:var(--ink);font-weight:600;margin:6px 0 14px;line-height:1.5}
 .opts{display:flex;flex-direction:column;gap:8px}
-.opt{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--rule);border-radius:9px;
+.opt{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--rule);border-radius:6px;
   padding:12px 14px;cursor:pointer;font-size:14px;background:#fff}
 .opt:hover{border-color:var(--brand);background:var(--brand-l)}
 .opt input{margin-top:3px;accent-color:var(--brand);flex:none}
@@ -98,13 +98,13 @@ input:focus,select:focus{outline:2px solid var(--brand);outline-offset:-1px}
   .scale5 .opt{flex-direction:row;align-items:flex-start;text-align:left}}
 
 /* 조건 문항 */
-.cond{border:1px solid var(--line);border-radius:12px;background:#fff;padding:20px 22px;margin:16px 0}
+.cond{border:1px solid var(--line);border-radius:8px;background:#fff;padding:20px 22px;margin:16px 0}
 .cond h4{font-size:16px;margin-bottom:6px}
-.crit{background:var(--thead);border-radius:9px;padding:12px 14px;margin:8px 0;font-size:13px}
+.crit{background:var(--thead);border-radius:7px;padding:12px 14px;margin:8px 0;font-size:13px}
 .crit b{color:var(--ink)}
 .crit ul{margin:6px 0 0 17px}
 .crit li{margin:3px 0}
-.excl{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:9px;
+.excl{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:7px;
   padding:12px 14px;font-size:13px;color:var(--warn);margin:10px 0}
 table.ex{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
 table.ex th,table.ex td{border:1px solid var(--rule);padding:7px 9px;text-align:left;vertical-align:top}
@@ -130,7 +130,7 @@ table.ex th{background:var(--thead);color:var(--ink);font-weight:600}
 .chkitem{display:flex;gap:9px;align-items:flex-start;padding:9px 0;font-size:13.5px;border-top:1px dashed var(--line)}
 .chkitem:first-child{border-top:0}
 .chkitem input{margin-top:3px;accent-color:var(--brand);flex:none}
-.tool{border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin:9px 0;background:#fff}
+.tool{border:1px solid var(--line);border-radius:7px;padding:13px 15px;margin:9px 0;background:#fff}
 .tool b{display:block;color:var(--ink);font-size:14px}
 .cite{font-size:12px;color:var(--sub);border-top:1px solid var(--line);margin-top:12px;padding-top:10px}
 .metric{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
@@ -139,7 +139,7 @@ table.ex th{background:var(--thead);color:var(--ink);font-weight:600}
 footer{border-top:1px solid var(--line);background:#fff;padding:22px 0;margin-top:40px}
 footer .in{max-width:1180px;margin:0 auto;padding:0 24px;font-size:12px;color:var(--sub)}
 .stamp{font-size:12px;color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-line);
-  border-radius:8px;padding:8px 13px;display:inline-block}
+  border-radius:7px;padding:8px 13px;display:inline-block}
 .err{color:#B42318;font-size:13px;margin-top:8px}
 
 /* 껍데기 — 화면이 바뀌어도 남는다 */
